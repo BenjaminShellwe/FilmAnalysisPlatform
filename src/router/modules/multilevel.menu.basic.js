@@ -25,8 +25,39 @@ export default {
             }
         },
         {
-            path: 'management',
-            name: 'SystemFeaturesManagement',
+            path: 'data_manage',
+            name: 'DataManagement',
+            component: EmptyLayout,
+            redirect: '/multilevel_menu_basic/monitor_manage/log',
+            meta: {
+                title: '数据管理'
+            },
+            children: [
+                {
+                    path: 'monitor',
+                    name: 'Monitoring',
+                    component: () => import('@/views/basic_functions/data_manage/source'),
+                    meta: {
+                        title: '数据来源',
+                        sidebar: true,
+                        breadcrumb: true
+                    }
+                },
+                {
+                    path: 'statistic',
+                    name: 'Statistics',
+                    component: () => import('@/views/basic_functions/data_manage/statistic'),
+                    meta: {
+                        title: '数据统计',
+                        sidebar: true,
+                        breadcrumb: true
+                    }
+                }
+            ]
+        },
+        {
+            path: 'function_manage',
+            name: 'FunctionManagement',
             component: EmptyLayout,
             redirect: '/multilevel_menu_basic/management/global_dic',
             meta: {
@@ -36,30 +67,9 @@ export default {
                 {
                     path: 'global_dic',
                     name: 'Dictionary_G',
-                    component: () => import('@/views/basic_functions/global_func_manage/data_dic/global_dic'),
+                    component: () => import('@/views/basic_functions/function_manage/graphsettings'),
                     meta: {
-                        title: '数据字典',
-                        sidebar: true,
-                        breadcrumb: true
-                    }
-                },
-                {
-                    path: 'personal_dic',
-                    name: 'Dictionary_P',
-                    component: () => import('@/views/basic_functions/global_func_manage/data_dic/personal_dic'),
-                    meta: {
-                        title: '个人字典',
-                        sidebar: false,
-                        breadcrumb: false,
-                        auth: ['permission.access', 'permission.edit']
-                    }
-                },
-                {
-                    path: 'notice',
-                    name: 'Notification',
-                    component: () => import('@/views/basic_functions/global_func_manage/message/global_message'),
-                    meta: {
-                        title: '系统通知',
+                        title: '图表设置',
                         sidebar: true,
                         breadcrumb: true
                     }
@@ -67,7 +77,7 @@ export default {
                 {
                     path: 'basic',
                     name: 'Basic',
-                    component: () => import('@/views/basic_functions/global_func_manage/basic_settings/basic'),
+                    component: () => import('@/views/basic_functions/function_manage/basic'),
                     meta: {
                         title: '基础设置',
                         sidebar: true,
@@ -77,10 +87,10 @@ export default {
             ]
         },
         {
-            path: 'account_management',
-            name: 'AccountContentManagement',
+            path: 'substance_management',
+            name: 'SubstanceManagement',
             component: EmptyLayout,
-            redirect: '/multilevel_menu_basic/account_management/personal',
+            redirect: '/multilevel_menu_basic/account_management/substance_management',
             meta: {
                 title: '内容管理',
                 sidebar: true,
@@ -90,9 +100,9 @@ export default {
                 {
                     path: 'personal',
                     name: 'Personal',
-                    component: () => import('@/views/basic_functions/account_management/personal/setting'),
+                    component: () => import('@/views/basic_functions/substance_management/graphic'),
                     meta: {
-                        title: '个人设置',
+                        title: '图形数据',
                         sidebar: true,
                         breadcrumb: true
                     }
@@ -100,65 +110,12 @@ export default {
                 {
                     path: 'enterprises',
                     name: 'Enterprises',
-                    component: () => import('@/views/basic_functions/account_management/enterprises/enterprises'),
+                    component: () => import('@/views/basic_functions/substance_management/table'),
                     meta: {
-                        title: '企业账户',
+                        title: '表格数据',
                         sidebar: true,
                         breadcrumb: true,
                         auth: ['permission.access']
-                    }
-                },
-                {
-                    path: 'security',
-                    name: 'Security',
-                    component: () => import('@/views/basic_functions/account_management/security/security'),
-                    meta: {
-                        title: '安全设置',
-                        sidebar: true,
-                        breadcrumb: true,
-                        auth: ['permission.edit']
-
-                    }
-                }
-            ]
-        },
-        {
-            path: 'monitor_manage',
-            name: 'MonitoringManagement',
-            component: EmptyLayout,
-            redirect: '/multilevel_menu_basic/monitor_manage/log',
-            meta: {
-                title: '数据管理'
-            },
-            children: [
-                {
-                    path: 'log',
-                    name: 'Logging',
-                    component: () => import('@/views/basic_functions/monitor_manage/log/log'),
-                    meta: {
-                        title: '系统日志',
-                        sidebar: true,
-                        breadcrumb: true
-                    }
-                },
-                {
-                    path: 'monitor',
-                    name: 'Monitoring',
-                    component: () => import('@/views/basic_functions/monitor_manage/monitor/monitor'),
-                    meta: {
-                        title: '监控设置',
-                        sidebar: true,
-                        breadcrumb: true
-                    }
-                },
-                {
-                    path: 'statistic',
-                    name: 'Statistics',
-                    component: () => import('@/views/basic_functions/monitor_manage/statistic/statistic'),
-                    meta: {
-                        title: '数据统计',
-                        sidebar: true,
-                        breadcrumb: true
                     }
                 }
             ]

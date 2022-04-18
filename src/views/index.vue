@@ -1,105 +1,34 @@
 <template>
     <div>
-        <page-header title="信息总览">
+        <page-header title="控制台页面">
             <template #content>
                 <div>
                     <div style="margin-bottom: 5px;">毕业设计开发</div>
                 </div>
             </template>
         </page-header>
-        <el-row :gutter="20" style="margin: 0 10px;">
-            <el-col :lg="8">
-                <page-main title="基本信息" style="margin: 0 0 0 0;">
-                    <div class="fa-info">
-                        <h1>Welcome!! {{ $store.state.user.account }} {{ $store.state.user.id }}</h1>
-                        <h4>Login time {{ timeNow() }} <br> There will be some welcome message</h4>
-                        <el-tabs type="border-card">
-                            <el-tab-pane label="个人信息">
-                                <el-descriptions class="margin-top" title="个人基本信息" :column="1" size="mini" direction="horizontal" border>
-                                    <el-descriptions-item label="账户名称">{{ personal.nickName }}</el-descriptions-item>
-                                    <el-descriptions-item label="性别">{{ personal.sex }}</el-descriptions-item>
-                                    <el-descriptions-item label="手机号码">{{ personal.phone }}</el-descriptions-item>
-                                    <el-descriptions-item label="职业状况">{{ personal.occupationStatus }}</el-descriptions-item>
-                                    <el-descriptions-item label="所属企业">{{ personal.enterprise }}</el-descriptions-item>
-                                    <el-descriptions-item label="注册时间">{{ personal.createTime }}</el-descriptions-item>
-                                    <el-descriptions-item label="居住地">{{ personal.habitation }}</el-descriptions-item>
-                                    <el-descriptions-item label="备注">{{ personal.remarks }}</el-descriptions-item>
-                                    <el-descriptions-item label="联系地址">{{ personal.address }}</el-descriptions-item>
-                                </el-descriptions>
-                            </el-tab-pane>
-                            <el-tab-pane label="工作信息">
-                                <el-descriptions class="margin-top" title="职位基本信息" :column="1" size="mini" direction="horizontal" border>
-                                    <el-descriptions-item label="真实姓名">{{ enterprise.realName }}</el-descriptions-item>
-                                    <el-descriptions-item label="工作号码"><el-tag size="small">{{ enterprise.phone }}</el-tag></el-descriptions-item>
-                                    <el-descriptions-item label="所属企业">{{ enterprise.enterpriseName }}</el-descriptions-item>
-                                    <el-descriptions-item label="职位">
-                                        <el-tag size="small">{{ enterprise.position }}</el-tag>
-                                    </el-descriptions-item>
-                                    <el-descriptions-item label="账户状态">{{ enterprise.status }}</el-descriptions-item>
-                                </el-descriptions>
-                            </el-tab-pane>
-                            <el-tab-pane label="信息图表">
-                                <div class="Echarts">
-                                    <div id="chartsUni" style="width: 450px; height: 450px;" />
-                                </div>
-                            </el-tab-pane>
-                        </el-tabs>
-                    </div>
-                    <br>
-                    <br>
-                </page-main>
-            </el-col>
-            <el-col :lg="16">
-                <el-row :gutter="20" style="margin: 0 -10px 20px -10px;">
-                    <el-col :md="4">
-                        <div :title="tips.information" class="icon-box icon-box-1" @click="onIconClick('information',true)">
-                            <i class="el-icon-info" />
-                            <div class="title">信息总览</div>
-                        </div>
-                    </el-col>
-                    <el-col :md="4">
-                        <div :title="tips.dictionary" class="icon-box icon-box-2" @click="onIconClick('dictionary',true)">
-                            <i class="el-icon-notebook-2" />
-                            <div class="title">个人字典</div>
-                        </div>
-                    </el-col>
-                    <el-col :md="4">
-                        <div :title="tips.chat" class="icon-box icon-box-3" @click="onIconClick('chat',true)">
-                            <i class="el-icon-chat-line-square" />
-                            <div class="title">即时通信</div>
-                        </div>
-                    </el-col>
-                    <el-col :md="4">
-                        <div :title="tips.extraFunction" class="icon-box icon-box-6" @click="onIconClick('extraFunction','')">
-                            <i class="el-icon-camera" />
-                            <div class="title">更多功能</div>
-                        </div>
-                    </el-col>
-                    <el-col :md="4">
-                        <div :title="tips.message" class="icon-box icon-box-5" @click="onIconClick('message',true)">
-                            <i class="el-icon-message" />
-                            <div class="title">站内通知</div>
-                        </div>
-                    </el-col>
-                    <el-col :md="4">
-                        <div :title="tips.help" class="icon-box icon-box-4" @click="onIconClick('help',true)">
-                            <i class="el-icon-help" />
-                            <div class="title">快速帮助</div>
-                        </div>
-                    </el-col>
-                </el-row>
-                <page-main>
-                    <VCalendar />
-                </page-main>
-            </el-col>
-        </el-row>
+        <page-main>
+            <span>此处可添加文字说明，自行添加css样式。点击下方文字快速跳转至对应图表</span>
+        </page-main>
+        <page-main>
+            <el-row style="margin: 0 10px;">
+                <el-col :span="12" class="Echarts">
+                    <el-card id="chartsGraph" shadow="hover" style="margin: 50px; padding: 25px; background-color: rgb(244, 251, 252);" />
+                    <span style="text-align: center; cursor: pointer;"><h1>图形可视化数据</h1></span>
+                </el-col>
+                <el-col :span="12" class="Echarts">
+                    <el-card id="chartsTable" shadow="hover" style="margin: 50px; padding: 25px; background-color: rgb(239, 239, 239);" />
+                    <span style="text-align: center; cursor: pointer;"><h1>表格可视化数据</h1></span>
+                </el-col>
+            </el-row>
+        </page-main>
     </div>
 </template>
 
 <script>
-import router from '@/router'
 import PageMain from '@/components/PageMain'
 import axios from 'axios'
+
 export default {
     name: 'IndexPage',
     components: {PageMain},
@@ -108,89 +37,21 @@ export default {
             key: 1,
             currentRole: 'dashboard',
             pageQueryValue: this.$store.state.user.id,
-            tips: {
-                information: 'Click to refresh',
-                dictionary: 'Set your personal data dictionary',
-                chat: 'Start to chat with somebody',
-                extraFunction: 'More action',
-                message: 'Manage notification',
-                help: 'Get online help'
-            },
             location: {
                 origin: location.origin
-            },
-            pageValue: {
-
-            },
-            enterprise: {
-                id: '',
-                realName: '',
-                enterpriseName: '',
-                department: '',
-                position: '',
-                status: '',
-                phone: ''
-            },
-            personal: {
-                id: '',
-                realName: '',
-                nickName: '',
-                phone: '',
-                sex: '',
-                occupationStatus: '',
-                enterprise: '',
-                createTime: '',
-                birth: '',
-                habitation: '',
-                address: '',
-                remarks: ''
-
-            },
-            pageTableHeaderBasic: {},
-            pageTableHeaderEnterprise: [{}]
+            }
         }
     },
     created() {
         this.handleGetInfo()
     },
     mounted() {
-        this.echartsUni()
+        this.echartsGraph()
+        this.echartsTable()
     },
     methods: {
         open(url) {
             window.open(url, 'top')
-        },
-        onIconClick(val, state) {
-            function executeFunc(val) {
-                if (val == 'information') {
-                    router.go(0)
-                } if (val == 'dictionary') {
-                    router.push({path: '/multilevel_menu_basic/management/personal_dic'})
-                } if (val == 'chat') {
-                    router.push({path: '/multilevel_menu_advanced/chat'})
-                } if (val == 'message') {
-                    router.push({path: '/multilevel_menu_advanced/message'})
-                } if (val == 'help') {
-                    router.push({path: '/help/index'})
-                } else {
-                    console.log('Receiving an error!')
-                }
-            }
-
-            if (state !== true) {
-                this.$message({
-                    message: `clicking ${val}, is under construction`,
-                    type: 'info'
-                })
-            } else {
-                executeFunc(val)
-                console.log('执行')
-            }
-        },
-        timeNow() {
-            const h = new Date().getHours()
-            const m = new Date().getMinutes()
-            return h + ':' + m
         },
         handleGetInfo() {
             const that = this
@@ -239,120 +100,203 @@ export default {
                 console.log(error)
             })
         },
-        echartsUni() {
-            var chartUni = this.$echarts.init(document.getElementById('chartsUni'))
-            // 配置图表
+        // 此函数对应左边动态图形，修改前请查阅echarts官方文档
+        echartsGraph() {
+            var chartGraph = this.$echarts.init(document.getElementById('chartsGraph'), null, {width: 400, height: 137})
             var option = {
-                tooltip: {
-                    trigger: 'item'
-                },
-                angleAxis: {
-                    type: 'category'
-                },
-                radiusAxis: {},
-                polar: {},
-                series: [
-                    {
-                        radius: ['25%', '50%'],
-                        type: 'pie',
-                        color: [
-                            '#d20000',
-                            '#cb5600',
-                            '#dee33a',
-                            '#26449a',
-                            '#287e24',
-                            '#ff9f7f',
-                            '#fb7293',
-                            '#E062AE',
-                            '#E690D1',
-                            '#e7bcf3',
-                            '#9d96f5',
-                            '#8378EA',
-                            '#96BFFF'
-                        ],
-                        data: [
-                            {
-                                value: 3,
-                                name: '到期'
-                            }, {
-                                value: 10,
-                                name: '紧急'
-                            }, {
-                                value: 2,
-                                name: '待办'
-                            }, {
-                                value: 2,
-                                name: '移交'
-                            }, {
-                                value: 10,
-                                name: '完成'
-                            }]
-                    }
-                ],
-                roseType: 'area',
-                legend: {
-                    show: false
+                graphic: {
+                    elements: [
+                        {
+                            type: 'group',
+                            left: 'center',
+                            top: 'center',
+                            children: new Array(20).fill(0).map((val, i) => ({
+                                type: 'rect',
+                                x: i * 20,
+                                shape: {
+                                    x: 0,
+                                    y: -40,
+                                    width: 10,
+                                    height: 80
+                                },
+                                style: {
+                                    fill: '#5470c6'
+                                },
+                                keyframeAnimation: {
+                                    duration: 1000,
+                                    delay: i * 200,
+                                    loop: true,
+                                    keyframes: [
+                                        {
+                                            percent: 0.5,
+                                            scaleY: 0.3,
+                                            easing: 'cubicIn'
+                                        },
+                                        {
+                                            percent: 1,
+                                            scaleY: 1,
+                                            easing: 'cubicOut'
+                                        }
+                                    ]
+                                }
+                            }))
+                        }
+                    ]
                 }
             }
-            chartUni.setOption(option)
+            // 配置图表
+            chartGraph.setOption(option)
+        },
+        // 此函数对应左边动态图形，修改前请查阅echarts官方文档
+        echartsTable() {
+            var chartTable = this.$echarts.init(document.getElementById('chartsTable'), null, {width: 630, height: 137})
+            let xData = []
+            let yData = []
+            let data = []
+            for (let y = 0; y < 5; y++) {
+                yData.push(y)
+                for (let x = 0; x < 10; x++) {
+                    data.push([x, y, 5])
+                }
+            }
+            for (let x = 0; x < 10; x++) {
+                xData.push(x)
+            }
+            var option
+            const options = [
+                {
+                    grid: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0
+                    },
+                    xAxis: {
+                        show: false,
+                        type: 'category',
+                        data: xData
+                    },
+                    yAxis: {
+                        show: false,
+                        type: 'category',
+                        data: yData
+                    },
+                    series: [
+                        {
+                            type: 'scatter',
+                            data: data,
+                            symbol: 'roundRect',
+                            symbolKeepAspect: true,
+                            universalTransition: true,
+                            symbolSize: 25
+                        }
+                    ]
+                },
+                {
+                    series: [
+                        {
+                            type: 'scatter',
+                            symbol: 'circle'
+                        }
+                    ]
+                },
+                {
+                    // heart
+                    series: [
+                        {
+                            symbol:
+                                'path://M23.6 2c-3.363 0-6.258 2.736-7.599 5.594-1.342-2.858-4.237-5.594-7.601-5.594-4.637 0-8.4 3.764-8.4 8.401 0 9.433 9.516 11.906 16.001 21.232 6.13-9.268 15.999-12.1 15.999-21.232 0-4.637-3.763-8.401-8.4-8.401z'
+                        }
+                    ]
+                },
+                {
+                    // happy
+                    series: [
+                        {
+                            symbol:
+                                'path://M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM22 8c1.105 0 2 1.343 2 3s-0.895 3-2 3-2-1.343-2-3 0.895-3 2-3zM10 8c1.105 0 2 1.343 2 3s-0.895 3-2 3-2-1.343-2-3 0.895-3 2-3zM16 28c-5.215 0-9.544-4.371-10-9.947 2.93 1.691 6.377 2.658 10 2.658s7.070-0.963 10-2.654c-0.455 5.576-4.785 9.942-10 9.942z'
+                        }
+                    ]
+                },
+                {
+                    // evil
+                    series: [
+                        {
+                            symbol:
+                                'path://M32 2c0-1.422-0.298-2.775-0.833-4-1.049 2.401-3.014 4.31-5.453 5.287-2.694-2.061-6.061-3.287-9.714-3.287s-7.021 1.226-9.714 3.287c-2.439-0.976-4.404-2.886-5.453-5.287-0.535 1.225-0.833 2.578-0.833 4 0 2.299 0.777 4.417 2.081 6.106-1.324 2.329-2.081 5.023-2.081 7.894 0 8.837 7.163 16 16 16s16-7.163 16-16c0-2.871-0.757-5.565-2.081-7.894 1.304-1.689 2.081-3.806 2.081-6.106zM18.003 11.891c0.064-1.483 1.413-2.467 2.55-3.036 1.086-0.543 2.16-0.814 2.205-0.826 0.536-0.134 1.079 0.192 1.213 0.728s-0.192 1.079-0.728 1.213c-0.551 0.139-1.204 0.379-1.779 0.667 0.333 0.357 0.537 0.836 0.537 1.363 0 1.105-0.895 2-2 2s-2-0.895-2-2c0-0.037 0.001-0.073 0.003-0.109zM8.030 8.758c0.134-0.536 0.677-0.862 1.213-0.728 0.045 0.011 1.119 0.283 2.205 0.826 1.137 0.569 2.486 1.553 2.55 3.036 0.002 0.036 0.003 0.072 0.003 0.109 0 1.105-0.895 2-2 2s-2-0.895-2-2c0-0.527 0.204-1.005 0.537-1.363-0.575-0.288-1.228-0.528-1.779-0.667-0.536-0.134-0.861-0.677-0.728-1.213zM16 26c-3.641 0-6.827-1.946-8.576-4.855l2.573-1.544c1.224 2.036 3.454 3.398 6.003 3.398s4.779-1.362 6.003-3.398l2.573 1.544c-1.749 2.908-4.935 4.855-8.576 4.855z'
+                        }
+                    ]
+                },
+                {
+                    // hipster
+                    series: [
+                        {
+                            symbol:
+                                'path://M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM22 8c1.105 0 2 0.895 2 2s-0.895 2-2 2-2-0.895-2-2 0.895-2 2-2zM10 8c1.105 0 2 0.895 2 2s-0.895 2-2 2-2-0.895-2-2 0.895-2 2-2zM16.994 21.23c-0.039-0.035-0.078-0.072-0.115-0.109-0.586-0.586-0.878-1.353-0.879-2.121-0 0.768-0.293 1.535-0.879 2.121-0.038 0.038-0.076 0.074-0.115 0.109-2.704 2.453-9.006-0.058-9.006-3.23 1.938 1.25 3.452 0.306 4.879-1.121 1.172-1.172 3.071-1.172 4.243 0 0.586 0.586 0.879 1.353 0.879 2.121 0-0.768 0.293-1.535 0.879-2.121 1.172-1.172 3.071-1.172 4.243 0 1.427 1.427 2.941 2.371 4.879 1.121 0 3.173-6.302 5.684-9.006 3.23z'
+                        }
+                    ]
+                },
+                {
+                    // shocked
+                    series: [
+                        {
+                            symbol:
+                                'path://M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM10 14c-1.105 0-2-1.343-2-3s0.895-3 2-3 2 1.343 2 3-0.895 3-2 3zM16 26c-2.209 0-4-1.791-4-4s1.791-4 4-4c2.209 0 4 1.791 4 4s-1.791 4-4 4zM22 14c-1.105 0-2-1.343-2-3s0.895-3 2-3 2 1.343 2 3-0.895 3-2 3z'
+                        }
+                    ]
+                },
+                {
+                    // pie chart
+                    series: [
+                        {
+                            symbol:
+                                'path://M14 18v-14c-7.732 0-14 6.268-14 14s6.268 14 14 14 14-6.268 14-14c0-2.251-0.532-4.378-1.476-6.262l-12.524 6.262zM28.524 7.738c-2.299-4.588-7.043-7.738-12.524-7.738v14l12.524-6.262z'
+                        }
+                    ]
+                },
+                {
+                    // users
+                    series: [
+                        {
+                            symbol:
+                                'path://M10.225 24.854c1.728-1.13 3.877-1.989 6.243-2.513-0.47-0.556-0.897-1.176-1.265-1.844-0.95-1.726-1.453-3.627-1.453-5.497 0-2.689 0-5.228 0.956-7.305 0.928-2.016 2.598-3.265 4.976-3.734-0.529-2.39-1.936-3.961-5.682-3.961-6 0-6 4.029-6 9 0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h8.719c0.454-0.403 0.956-0.787 1.506-1.146zM24 24.082v-1.649c2.203-1.241 4-4.337 4-7.432 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h28c0-4.030-5.216-7.364-12-7.918z'
+                        }
+                    ]
+                },
+                {
+                    // mug
+                    series: [
+                        {
+                            symbol:
+                                'path://M30 10h-6v-3c0-2.761-5.373-5-12-5s-12 2.239-12 5v20c0 2.761 5.373 5 12 5s12-2.239 12-5v-3h6c1.105 0 2-0.895 2-2v-10c0-1.105-0.895-2-2-2zM5.502 8.075c-1.156-0.381-1.857-0.789-2.232-1.075 0.375-0.286 1.075-0.694 2.232-1.075 1.811-0.597 4.118-0.925 6.498-0.925s4.688 0.329 6.498 0.925c1.156 0.381 1.857 0.789 2.232 1.075-0.375 0.286-1.076 0.694-2.232 1.075-1.811 0.597-4.118 0.925-6.498 0.925s-4.688-0.329-6.498-0.925zM28 20h-4v-6h4v6z'
+                        }
+                    ]
+                },
+                {
+                    // plane
+                    series: [
+                        {
+                            symbol:
+                                'path://M24 19.999l-5.713-5.713 13.713-10.286-4-4-17.141 6.858-5.397-5.397c-1.556-1.556-3.728-1.928-4.828-0.828s-0.727 3.273 0.828 4.828l5.396 5.396-6.858 17.143 4 4 10.287-13.715 5.713 5.713v7.999h4l2-6 6-2v-4l-7.999 0z'
+                        }
+                    ]
+                }
+            ]
+            let optionIndex = 0
+            option = options[optionIndex]
+            setInterval(function() {
+                optionIndex = (optionIndex + 1) % options.length
+                chartTable.setOption(options[optionIndex])
+            }, 700)
+            // 配置图表
+            option && chartTable.setOption(option)
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.pageTable {
-    border-collapse: collapse;
-    margin: 0 auto;
-    text-align: center;
-}
-.pageTable td,
-.pageTable th {
-    border: 1px solid #cad9ea;
-    color: #666;
-    height: 60px;
-}
-.fa-info {
-    padding: 10px 0 0;
-    text-align: center;
-    h1 {
-        margin: 10px auto 20px;
-    }
-}
-.question {
-    .answer {
-        margin: 20px 0 0;
-        padding-left: 20px;
-        font-size: 14px;
-        color: #aaa;
-        li {
-            margin-bottom: 10px;
-            line-height: 1.5;
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-        span {
-            color: #666;
-            font-weight: bold;
-        }
-    }
-}
-.icon-box {
-    padding: 20px;
-    text-align: center;
-    background-color: #fff;
+.canvas {
     cursor: pointer;
-    transition: 0.2s;
-    &:hover {
-        color: #a1a1a1;
-    }
-    i {
-        font-size: 24px;
-    }
-    .title {
-        margin-top: 5px;
-        font-size: 14px;
-    }
 }
 </style>

@@ -32,7 +32,7 @@ export default {
                 {
                     path: 'page',
                     name: 'multilevelMenuExample2-1',
-                    component: () => import('@/views/basic_functions/account_management/personal/setting'),
+                    component: () => import('@/views/basic_functions/substance_management/personal/setting'),
                     meta: {
                         title: '个人设置'
                     }

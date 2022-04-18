@@ -1,33 +1,28 @@
 <template>
     <div>
-        <page-header title="监控设置">
+        <page-header title="数据来源">
             <template #content>
                 <div>
                     <div class="inLine">
                         <p class="hover" @click="back">返回上一页</p>
                     </div>
-                    &nbsp;
                     <div>
                         此页为系统监控设置
                     </div>
-                    <span>是否读取监控数据 </span>
-                    <el-switch
-                        v-model="pageMainShow"
-                        active-text="开启"
-                        inactive-text="关闭"
-                        @click="handleSwitchChange"
-                    />
                 </div>
             </template>
         </page-header>
-        <page-main v-show="pageMainShow">
+        <page-main title="数据源选择">
+
+        </page-main>
+        <page-main v-show="pageMainShow" title="数据信息">
             <el-table :data="pageDataList" border stripe highlight-current-row>
                 <el-table-column type="index" label="序列" width="50px" />
-                <el-table-column prop="userName" label="账户名称" />
-                <el-table-column prop="userID" label="账户ID" />
-                <el-table-column prop="gid" label="GID" />
-                <el-table-column prop="type" label="操作类型" />
-                <el-table-column prop="date" label="操作时间" />
+                <el-table-column prop="userName" label="placeholder1" />
+                <el-table-column prop="userID" label="placeholder2" />
+                <el-table-column prop="gid" label="placeholder3" />
+                <el-table-column prop="type" label="placeholder4" />
+                <el-table-column prop="date" label="placeholder5" />
             </el-table>
         </page-main>
     </div>

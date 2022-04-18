@@ -1,13 +1,30 @@
 <template>
     <div>
-        <page-header title="个人字典">
+        <page-header title="图形设置">
             <template #content>
                 <div>
-                    <div class="hover" @click="back" @mouseover="changeMask(true)" @mouseout="changeMask(false)">返回上一页</div>
+                    <div class="hover" @click="back">返回上一页</div>
+                    <div>placeholder</div>
+                    <span>是否开启placeholder </span>
+                    <el-switch
+                        v-model="isShow"
+                        active-text="开启"
+                        inactive-text="关闭"
+                        @click="changeShow"
+                    />
                 </div>
             </template>
         </page-header>
-        <page-main title="个人字典" class="box-card itemSpacing">
+        <page-main v-show="isShow" id="collapsible">
+            <span style="line-height: 2.2;">是否允许placeholder
+                <el-switch
+                    v-model="value1"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    active-text="允许"
+                    inactive-text="拒绝"
+                />
+            </span><br>
             <el-row>
                 <el-col :span="6">
                     <div class="inLine">
@@ -40,93 +57,58 @@
                     </el-tooltip>
                 </el-col>
             </el-row>
+
+            <br>
         </page-main>
-        <page-main title="字典列表">
-            <el-card class="box-card" shadow="hover">
-                <el-table
-                    :data="tableData"
-                    style="width: 100%;"
-                    max-height="250"
-                >
-                    <el-table-column
-                        fixed
-                        prop="none"
-                        label="列"
-                        width="80"
-                        type="index"
-                    />
-                    <el-table-column
-                        fixed
-                        prop="name"
-                        label="名称"
-                        width="300"
-                    />
-                    <el-table-column
-                        prop="notes"
-                        label="备注"
-                        width="360"
-                    />
-                    <el-table-column
-                        prop="state"
-                        label="状态"
-                        width="200"
-                    />
-                    <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="360"
-                    >
-                        <template>
-                            <el-dropdown size="small" split-button type="primary" @click="dialogVisible = true">
-                                编辑
-                                <el-dropdown-menu slot="dropdown" @click="dialogVisible = true">
-                                    <el-dropdown-item @click="dialogVisible = true">
-                                        信息变更
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        修改权限
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
-                            &nbsp;
-                            <el-button
-                                type="primary"
-                                size="small"
-                                @click="dialogVisible = true"
-                            >
-                                详情
-                            </el-button>
-                            <el-button
-                                type="danger"
-                                size="small"
-                                @click="dialogVisible = true"
-                            >
-                                移除
-                            </el-button>
+        <!--   按类型查看与修改     -->
+        <page-main v-show="isShow" title="按类型查看">
+            <el-row>
+                <el-col :span="2">
+                    <Auth :value="'permission.edit'" style="display: inline-block; padding: 0 0 0 0; margin: 0 0 0 0;">
+                        <el-button v-show="pageButtonVisible" type="primary" size="mini" style="margin: 5px 5px 5px 5px;" @click="handleEditable('pageButtonVisible')">编辑模式</el-button>
+                        <template slot="no-auth">
+                            <span style="font-size: smaller; color: red;">没有使用权限<br>permission.edit</span>
                         </template>
-                    </el-table-column>
-                </el-table>
-                <el-dialog
-                    title="来自shellwe的警告"
-                    :visible.sync="dialogVisible"
-                    width="30%"
-                >
-                    <span>开发中 此操作暂时拒绝</span>
-                    <span slot="footer" class="dialog-footer">
-                        <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
-                        <el-button type="primary" @click="dialogVisible = false">明 白</el-button>
-                    </span>
-                </el-dialog>
-                <el-pagination
-                    :current-page="currentPage4"
-                    :page-sizes="[1, 3, 5, 10]"
-                    :page-size="10"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="40"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                />
-            </el-card>
+                    </Auth>
+                    <el-button v-show="pageButtonVisibleUni" type="success" size="mini" style="margin: 5px 5px 5px 5px;" @click="handleEditable('pageButtonVisibleUni')">完成编辑</el-button>
+                </el-col>
+                <el-col :span="22">
+                    <el-alert title="编辑模式按钮允许你进行修改规则,但请先点击左下方左侧栏加载,删除规则请到全部字典信息表中操作" type="info" style="margin-bottom: 20px;" />
+                </el-col>
+            </el-row>
+            <el-tabs tab-position="left" style="max-height: 330px; overflow-y: auto; overflow-x: hidden;" @tab-click="handleQueryUID">
+                <el-tab-pane v-for="(item, index) in pageTabValue" :key="index" :label="item" :name="index.toString()" style="min-height: 315px; overflow-y: auto; overflow-x: hidden;">
+                    <span style="margin: 5px 0 15px 0;">当前操作: {{ item }} - {{ index }}</span>
+                    <el-row style="margin-top: 10px;">
+                        <el-col v-for="(indexUni) in pageQueryUID.length" :key="indexUni" :span="4">
+                            <el-card shadow="hover" body-style="padding: 2px;" style="margin: 2px;">
+                                <el-descriptions :title="item + pageQueryUID[indexUni-1].id" :name="pageQueryUID[indexUni-1].id" :column="1" size="mini" border>
+                                    <el-descriptions-item label="GID">
+                                        <el-input v-model="pageFormValue.GID" :placeholder="pageQueryUID[indexUni-1].prefix+pageQueryUID[indexUni-1].uniqueID" :disabled="editable" style="width: 100px;" size="mini" clearable />
+                                    </el-descriptions-item>
+                                    <el-descriptions-item label="序号">
+                                        <el-input v-model="pageFormValue.valueID" :placeholder="pageQueryUID[indexUni-1].valueID" :disabled="editable" style="width: 60px;" size="mini" clearable />
+                                    </el-descriptions-item>
+                                    <el-descriptions-item label="代码">
+                                        <el-input v-model="pageFormValue.typeCode" :placeholder="pageQueryUID[indexUni-1].typeCode" :disabled="editable" style="width: 135px;" size="mini" clearable />
+                                    </el-descriptions-item>
+                                    <el-descriptions-item label="类型">
+                                        <el-input v-model="pageFormValue.typeName" :placeholder="pageQueryUID[indexUni-1].typeName" :disabled="editable" style="width: 100px;" size="mini" clearable />
+                                    </el-descriptions-item>
+                                    <el-descriptions-item label="名称">
+                                        <el-input v-model="pageFormValue.valueName" :placeholder="pageQueryUID[indexUni-1].valueName" :disabled="editable" style="width: 100px;" size="mini" clearable />
+                                    </el-descriptions-item>
+                                    <el-descriptions-item label="生效">
+                                        <el-select v-model="pageFormValue.valueStatus" :placeholder="pageQueryUID[indexUni-1].valueStatus" :disabled="editable" style="width: 100px;" size="mini">
+                                            <el-option v-for="itemUni in options" :key="itemUni.valueState" :label="itemUni.label" :value="itemUni.valueState" />
+                                        </el-select>
+                                    </el-descriptions-item>
+                                </el-descriptions>
+                            </el-card>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+            </el-tabs>
         </page-main>
         <page-main v-show="isShow" title="全部字典信息">
             <template>
@@ -139,7 +121,7 @@
                                      :label="value"
                                      :width="value.width"
                     >
-                        <template #default="scope">
+                        <template slot-scope="scope">
                             {{ scope.row[value] }}
                         </template>
                     </el-table-column>
@@ -275,25 +257,40 @@
 </template>
 
 <script>
-import PageHeader from '@/components/PageHeader'
+import PageMain from '@/components/PageMain'
 import axios from 'axios'
+let fields = [
+    {label: '日期', prop: 'date'},
+    {label: '模板名称', prop: 'model_name'},
+    {label: '模板说明', prop: 'model_explain'},
+    {label: '模板状态', prop: 'model_state'}
+]
 export default {
-    name: 'PersonalDic',
-    components: {PageHeader},
+    name: 'GlobalDic',
+    components: {PageMain},
     data() {
         return {
-            pageQueryValue: {
-                typeName: ''
-            },
-            pageDialogVisibleUni: false,
+            editable: true,
+            pageButtonVisible: true,
+            pageButtonVisibleUni: false,
             pageFormHead: [],
-            key: 1, // table key
-            isShow: true,
             pageDialogVisible: false,
-            dialogVisible: false,
-            currentPage2: 5,
-            currentPage3: 5,
-            currentPage4: 4,
+            pageDialogVisibleUni: false,
+            isShow: true,
+            value1: true,
+            description: '',
+            pageQueryUID: [],
+            pageTabValue: [],
+            pageFormValue: {
+                id: '',
+                GID: '',
+                valueID: '',
+                typeCode: '',
+                typeName: '',
+                valueName: '',
+                valueStatus: ''
+            },
+            pageRowValue: {},
             pageFormList: {
                 prefix: '',
                 typeCode: '',
@@ -305,77 +302,82 @@ export default {
                 valueID: '',
                 type: ''
             },
+            pageQueryValue: {
+                typeName: ''
+            },
+            valueState: '',
+            options: [{
+                valueState: 'efficient',
+                label: '有效'
+            }, {
+                valueState: 'inefficient',
+                label: '无效'
+            }],
+            key: 1, // table key
+            formThead: fields, // 默认表头 Default header
             data: [{
                 date: '2022-01-12-17:57',
                 model_name: '示例1',
                 model_explain: '展示示例',
                 model_state: '有效'
             }],
-            tableData: [{
-                name: 'Shellwe',
-                notes: '测试数据',
-                state: '正常'
-            }, {
-                name: 'Shellwe',
-                notes: '响应操作',
-                state: '停用'
-            }, {
-                name: 'Shellwe',
-                notes: '不会改变',
-                state: '弃用'
-            }]
+            pageData: [{}]
         }
     },
-    mounted: function() {
-        // this.loadInformation()
+    watch: {
+        /**
+         * 监控表格的数据data，自动设置表格宽度
+         * @param https://www.cnblogs.com/huangxiaoxue/p/12034326.html
+         */
+        data(valArr) {
+            const _this = this
+            this.formThead = fields.map(function(value) {
+                const arr = valArr.map(x => x[value.prop])  // 获取每一列的所有数据
+                arr.push(value.label)  // 把每列的表头也加进去算
+                value.width = _this.getMaxLength(arr) + 5 // 每列内容最大的宽度 + 表格的内间距(依据实际情况而定)
+                return value
+            })
+        }
+    },
+    mounted() {
         this.getUser()
     },
     methods: {
+        changeShow: function() {
+            this.isShow = !this.isShow
+            if (this.isShow == false) {
+                this.value1 = false
+            }
+        },
         back() {
             history.go(-1)
         },
-        // 修改显示状态
-        changeMask: function(b) {
-            if (b) {
-                document.getElementById('abc').style.cursor = 'pointer'
-            } else {
-                document.getElementById('abc').style.cursor = 'wait'
-            }
-            console.log(b)
+        handleClick(row) {
+            console.log(row)
         },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`)
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`)
-        },
-        async handleButtonQuery() {
-            // console.log(this.pageQueryValue)
-            const that = this
-            axios({
-                method: 'post',
-                url: '/dictionary/queryTypeName',
-                data: this.pageQueryValue
-            }).then(function(response) {
-                // console.log(response)
-                let keys = []
-                if (response.data.data == null) {
-                    that.data = null
-                } else {
-                    for (let property in response.data.data[0]) {
-                        keys.push(property)
+        getMaxLength(arr) {
+            return arr.reduce((acc, item) => {
+                if (item) {
+                    let calcLen = this.getTextWidth(item)
+                    if (acc < calcLen) {
+                        acc = calcLen
                     }
-                    that.pageFormHead = keys
-                    that.data = response.data.data
                 }
-            }).catch(error => {
-                this.$notify({
-                    title: '操作执行异常',
-                    message: error,
-                    type: 'error',
-                    duration: 6500
-                })
-            })
+                return acc
+            }, 0)
+        },
+        getTextWidth(str) {
+            let width = 0
+            let html = document.createElement('span')
+            html.innerText = str
+            html.className = 'getTextWidth'
+            document.querySelector('body').appendChild(html)
+            width = document.querySelector('.getTextWidth').offsetWidth
+            document.querySelector('.getTextWidth').remove()
+            return width
+        },
+        deleteRow(index, rows) {
+            rows.splice(index, 1)
         },
         // 1. 定义getUserList方法 获取后台服务器数据
         async getUser() {
@@ -429,6 +431,55 @@ export default {
             //         values.push(object[property])
             //     return values
             // }
+        },
+        async handleButtonQuery() {
+            // console.log(this.pageQueryValue)
+            const that = this
+            axios({
+                method: 'post',
+                url: '/dictionary/queryTypeName',
+                data: this.pageQueryValue
+            }).then(function(response) {
+                // console.log(response)
+                let keys = []
+                if (response.data.data == null) {
+                    that.data = null
+                } else {
+                    for (let property in response.data.data[0]) {
+                        keys.push(property)
+                    }
+                    that.pageFormHead = keys
+                    that.data = response.data.data
+                }
+            }).catch(error => {
+                this.$notify({
+                    title: '操作执行异常',
+                    message: error,
+                    type: 'error',
+                    duration: 6500
+                })
+            })
+        },
+        handleButtonCreate() {
+            const that = this
+            // console.log(this.pageFormList)
+            // console.log(this.pageFormList.valueStatus)
+            axios({
+                method: 'post',
+                url: '/dictionary/addGlobalDic',
+                data: this.pageFormList
+            }).then(function(response) {
+                that.pageDialogVisible = false
+                that.handleSuccess(response.data.code, response.data.msg)
+                console.log(response)
+            }).catch(error => {
+                this.$notify({
+                    title: '操作执行异常',
+                    message: error,
+                    type: 'error',
+                    duration: 6500
+                })
+            })
         },
         getDetails(row) {
             this.pageRowValue = row
@@ -501,9 +552,39 @@ export default {
                 })
             })
         },
-        handleButtonCancel(visible, val) {
-            this[visible] = false
-            this[val] = {}
+        handleSuccess(code, msg) {
+            let t
+            if (code == 415) {
+                t = 'error'
+            }
+            if (code == 200) {
+                t = 'success'
+            }
+            this.$notify({
+                title: t,
+                message: msg,
+                type: t,
+                duration: 6500
+            })
+        },
+        handleQueryUID(tab) {
+            this.pageQueryUID = this.data.reduce((total, current) => {
+                current.uniqueID == tab.name && total.push(current)
+                return total
+            }, [])
+            // console.log(this.pageQueryUID)
+        },
+        handleEditable(button) {
+            this[button] = !this[button]
+            if (button == 'pageButtonVisible') {
+                this.pageButtonVisibleUni = true
+                this.handleQueryUID()
+            }
+            if (button == 'pageButtonVisibleUni') {
+                this.pageButtonVisible = true
+                console.log(this.pageFormValue)
+            }
+            this.editable = !this.editable
         },
         handleButtonConfirm() {
             axios({
@@ -528,26 +609,9 @@ export default {
                 })
             })
         },
-        handleButtonCreate() {
-            const that = this
-            // console.log(this.pageFormList)
-            // console.log(this.pageFormList.valueStatus)
-            axios({
-                method: 'post',
-                url: '/dictionary/addGlobalDic',
-                data: this.pageFormList
-            }).then(function(response) {
-                that.pageDialogVisible = false
-                that.handleSuccess(response.data.code, response.data.msg)
-                console.log(response)
-            }).catch(error => {
-                this.$notify({
-                    title: '操作执行异常',
-                    message: error,
-                    type: 'error',
-                    duration: 6500
-                })
-            })
+        handleButtonCancel(visible, val) {
+            this[visible] = false
+            this[val] = {}
         }
     }
 }
@@ -555,5 +619,8 @@ export default {
 <style>
 .hover {
     cursor: pointer;
+}
+.inLine {
+    display: inline-block;
 }
 </style>

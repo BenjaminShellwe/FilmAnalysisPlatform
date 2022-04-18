@@ -42,7 +42,7 @@ const constantRoutes = [
                     {
                         path: 'setting',
                         name: 'personalSetting',
-                        component: () => import('@/views/basic_functions/account_management/personal/setting'),
+                        // component: () => import('@/views/basic_functions/substance_management/personal/setting'),
                         meta: {
                             title: '个人设置'
                         }
@@ -50,7 +50,7 @@ const constantRoutes = [
                     {
                         path: 'edit/password',
                         name: 'personalEditPassword',
-                        component: () => import('@/views/basic_functions/account_management/personal/edit.password'),
+                        // component: () => import('@/views/basic_functions/substance_management/personal/edit.password'),
                         meta: {
                             title: '修改密码'
                         }

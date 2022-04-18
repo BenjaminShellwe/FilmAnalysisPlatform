@@ -6,19 +6,19 @@
                     <p class="hover" @click="back">返回上一页</p>
                 </div>
                 <div class="inLine">
-                    此页为系统的数据统计
+                    placeholder
                 </div>
             </template>
         </page-header>
-        <page-main title="企业招聘数据统计">
+        <page-main title="placeholder">
             <el-row style="padding: 2px 0;">
                 <el-card shadow="hover" body-style="padding: 5px;" style="margin: 2px;">
                     <div slot="header" class="clearfix">
-                        <span>外部招聘源盘点 开发中 (点击右边进行操作)</span>
+                        <span>placeholder</span>
                         <el-button style="float: right; padding: 3px 0;" type="text">修改操作</el-button>
                     </div>
                     <el-tabs tab-position="left">
-                        <el-tab-pane label="招聘选拔">
+                        <el-tab-pane label="placeholder">
                             <el-row>
                                 <el-col :span="6" style="padding: 2px;">
                                     <el-card class="Echarts" body-style="padding: 1px" style="padding: 1px; width: 340px;" shadow="hover">
@@ -98,9 +98,9 @@
                                 </el-table>
                             </el-row>
                         </el-tab-pane>
-                        <el-tab-pane label="雇员推荐">
+                        <el-tab-pane label="placeholder">
                             <el-tabs tab-position="top">
-                                <el-tab-pane label="行业推荐">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -163,7 +163,7 @@
                                         </el-table>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="猎头推荐">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -226,7 +226,7 @@
                                         </el-table>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="内部推荐">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -291,9 +291,9 @@
                                 </el-tab-pane>
                             </el-tabs>
                         </el-tab-pane>
-                        <el-tab-pane label="对应关系">
-                            <span>针对同行或竞争对手公司进行组织价格摸底,了解关键人和职责</span>
-                            <span>由某一关键人作为切入点,找到上下级,并反复验证</span>
+                        <el-tab-pane label="placeholder">
+                            <span>placeholder</span>
+                            <span>placeholder</span>
                         </el-tab-pane>
                     </el-tabs>
                 </el-card>
@@ -301,13 +301,13 @@
             <el-row style="padding: 2px 0;">
                 <el-card shadow="hover" body-style="padding: 5px;" style="margin: 2px;">
                     <div slot="header" class="clearfix">
-                        <span>内部信息源盘点 开发中 (点击右边进行操作)</span>
-                        <el-button style="float: right; padding: 3px 0;" type="text">修改操作</el-button>
+                        <span>placeholder</span>
+                        <el-button style="float: right; padding: 3px 0;" type="text">placeholder</el-button>
                     </div>
                     <el-tabs tab-position="left">
-                        <el-tab-pane label="在职雇员">
+                        <el-tab-pane label="placeholder">
                             <el-tabs tab-position="top">
-                                <el-tab-pane label="内部竞聘">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -370,7 +370,7 @@
                                         </el-table>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="内部竞升">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -433,7 +433,7 @@
                                         </el-table>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="内部培训">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -498,10 +498,10 @@
                                 </el-tab-pane>
                             </el-tabs>
                         </el-tab-pane>
-                        <el-tab-pane label="离职雇员">
-                            <h2>离职职员</h2>
+                        <el-tab-pane label="placeholder">
+                            <h2>placeholder</h2>
                             <el-tabs tab-position="top">
-                                <el-tab-pane label="定期跟踪近况">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -564,7 +564,7 @@
                                         </el-table>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="离职福利关怀">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -627,7 +627,7 @@
                                         </el-table>
                                     </el-row>
                                 </el-tab-pane>
-                                <el-tab-pane label="邀请参加活动">
+                                <el-tab-pane label="placeholder">
                                     <el-row>
                                         <el-table
                                             :data="tableData"
@@ -698,12 +698,12 @@
             <el-row style="padding: 2px 0;">
                 <el-card shadow="hover" body-style="padding: 5px;" style="margin: 2px;">
                     <div slot="header" class="clearfix">
-                        <span>招聘统计分析 开发中 (点击右边进行操作)</span>
+                        <span>placeholder</span>
                         <el-button style="float: right; padding: 3px 0;" type="text">修改操作</el-button>
                     </div>
                     <el-tabs tab-position="left">
-                        <el-tab-pane label="渠道有效性分析">
-                            <h2>渠道有效性分析</h2>
+                        <el-tab-pane label="placeholder">
+                            <h2>placeholder</h2>
                             <el-table
                                 :data="pagePropsValueUni.filter(data => !search || data.id.toLowerCase().includes(search.toLowerCase()))"
                                 style="width: 100%;"
@@ -749,8 +749,8 @@
                                 </el-table-column>
                             </el-table>
                         </el-tab-pane>
-                        <el-tab-pane label="周期与成本分析">
-                            <h2>周期与成本分析</h2>
+                        <el-tab-pane label="placeholder">
+                            <h2>placeholder</h2>
                             <el-table
                                 :data="pagePropsValueUni.filter(data => !search || data.id.toLowerCase().includes(search.toLowerCase()))"
                                 style="width: 100%;"
@@ -796,8 +796,8 @@
                                 </el-table-column>
                             </el-table>
                         </el-tab-pane>
-                        <el-tab-pane label="招聘任务及统计">
-                            <h2>招聘任务及统计</h2>
+                        <el-tab-pane label="placeholder">
+                            <h2>placeholder</h2>
                             <el-table
                                 :data="pagePropsValueUni.filter(data => !search || data.id.toLowerCase().includes(search.toLowerCase()))"
                                 style="width: 100%;"
@@ -847,7 +847,7 @@
                 </el-card>
             </el-row>
         </page-main>
-        <page-main title="业务数据统计">
+        <page-main title="placeholder">
             设计中
         </page-main>
     </div>

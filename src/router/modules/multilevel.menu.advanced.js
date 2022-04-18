@@ -19,27 +19,6 @@ export default {
     },
     children: [
         {
-            path: 'chat',
-            name: 'ChatRoom',
-            component: () => import(/* webpackChunkName: 'breadcrumb_example' */ '@/views/basic_functions/global_func_manage/chat/chat'),
-            meta: {
-                title: '即时通信',
-                sidebar: false,
-                breadcrumb: false,
-                auth: ['permission.access', 'permission.edit']
-            }
-        },
-        {
-            path: 'message',
-            name: 'Message',
-            component: () => import(/* webpackChunkName: 'breadcrumb_example' */ '@/views/basic_functions/global_func_manage/message/message'),
-            meta: {
-                title: '站内通知',
-                sidebar: false,
-                breadcrumb: false
-            }
-        },
-        {
             path: 'list',
             name: 'List',
             component: EmptyLayout,
