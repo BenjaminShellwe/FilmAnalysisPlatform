@@ -16,6 +16,7 @@ import com.bap.util.Result;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -201,6 +202,14 @@ public class UserController {
             return new Result(2001, "企业不存在或用户未绑定企业");
         }
         return new Result(list);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateTime")
+    public Result updateTime() {
+        Timestamp s = basicUserMapper.updateTime();
+//        System.out.println("测试输出" + s);
+        return new Result(s);
     }
 
 

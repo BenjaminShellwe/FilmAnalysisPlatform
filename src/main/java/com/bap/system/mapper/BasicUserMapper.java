@@ -7,18 +7,18 @@ package com.bap.system.mapper;
  */
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
-import com.bap.system.dto.input.UserQueryPara;
+import com.bap.system.entity.BasicUser;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
-import com.bap.system.entity.BasicUser;
-import org.apache.ibatis.annotations.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
 @Repository
 public interface BasicUserMapper extends BaseMapper<BasicUser> {
+    @Select("SELECT updated_at FROM basic_user WHERE userName = 'admin'")
+    Timestamp updateTime();
 
     @Select("select userName from basic_user where userName = #{'userName'}")
     String selectUserName(String userName);
@@ -40,24 +40,6 @@ public interface BasicUserMapper extends BaseMapper<BasicUser> {
 
     @Select("select enterpriseID from basic_user where id = #{'id'}")
     public List<BasicUser> getEID(String id);
-
-    /**
-     * 列表分页
-     *
-     * @param page
-     * @param filter
-     * @return
-     */
-    List<BasicUser> selectUsers(Pagination page, @Param("filter") UserQueryPara filter);
-
-    /**
-     * 列表
-     *
-     * @param filter
-     * @return
-     */
-    List<BasicUser> selectUsers(@Param("filter") UserQueryPara filter);
-
 
     /**
      * 通过token查找用户信息

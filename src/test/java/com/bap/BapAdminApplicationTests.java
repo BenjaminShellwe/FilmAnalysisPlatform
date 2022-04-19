@@ -7,9 +7,7 @@ package com.bap;
  * Date 2022/4/17 9:45:46
  */
 
-import com.bap.system.service.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.reflect.Method;
@@ -20,23 +18,6 @@ import java.util.Map;
 
 @SpringBootTest
 class BapAdminApplicationTests {
-
-    @Autowired
-    public GetInfoService getInfoService;
-    @Autowired
-    public GlobalDicService globalDicService;
-    @Autowired
-    public SystemLogEventService systemLogEventService;
-    @Autowired
-    public MonitorService monitorService;
-    @Autowired
-    public PerformanceService performanceService;
-    @Autowired
-    public VacancyComingService vacancyComingService;
-    @Autowired
-    public VacancyService vacancyService;
-
-
 
 
     @Test

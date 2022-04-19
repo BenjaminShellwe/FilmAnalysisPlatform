@@ -6,27 +6,24 @@ package com.bap.system.entity;
  * Date 2022/4/17 9:45:39
  */
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.annotations.TableId;
-import javax.persistence.Column;
-import javax.persistence.Id;
-
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
-import com.bap.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.util.Date;
+
+@EqualsAndHashCode(callSuper = false)
 @Data
 @ApiModel(description = "系统管理-用户基础表")
 @TableName("basic_user")
-public class BasicUser extends BaseEntity<BasicUser> {
+public class BasicUser {
 
     private static final long serialVersionUID = 1L;
 
@@ -80,10 +77,6 @@ public class BasicUser extends BaseEntity<BasicUser> {
     @TableField("salt")
     private String salt;
 
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 
     public Integer getId() {
         return id;
