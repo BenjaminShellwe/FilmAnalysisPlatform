@@ -5,10 +5,17 @@
                 <div class="inLine">
                     <p class="hover" @click="back">返回上一页</p>
                 </div>
-
-                <div class="inLine">
-                    此页为placeholder
-                </div>
+                <el-row>
+                    <el-col :span="8">
+                        2
+                    </el-col>
+                    <el-col :span="8">
+                        |
+                    </el-col>
+                    <el-col :span="8">
+                        2
+                    </el-col>
+                </el-row>
             </template>
         </page-header>
         <el-dialog

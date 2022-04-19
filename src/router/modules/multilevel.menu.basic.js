@@ -28,14 +28,14 @@ export default {
             path: 'data_manage',
             name: 'DataManagement',
             component: EmptyLayout,
-            redirect: '/multilevel_menu_basic/monitor_manage/log',
+            redirect: '/multilevel_menu_basic/monitor_manage',
             meta: {
                 title: '数据管理'
             },
             children: [
                 {
-                    path: 'monitor',
-                    name: 'Monitoring',
+                    path: 'source',
+                    name: 'Source',
                     component: () => import('@/views/basic_functions/data_manage/source'),
                     meta: {
                         title: '数据来源',
@@ -65,8 +65,8 @@ export default {
             },
             children: [
                 {
-                    path: 'global_dic',
-                    name: 'Dictionary_G',
+                    path: 'graphsettings',
+                    name: 'Graphsettings',
                     component: () => import('@/views/basic_functions/function_manage/graphsettings'),
                     meta: {
                         title: '图表设置',
@@ -98,8 +98,8 @@ export default {
             },
             children: [
                 {
-                    path: 'personal',
-                    name: 'Personal',
+                    path: 'graphic',
+                    name: 'Graphic',
                     component: () => import('@/views/basic_functions/substance_management/graphic'),
                     meta: {
                         title: '图形数据',
@@ -108,8 +108,8 @@ export default {
                     }
                 },
                 {
-                    path: 'enterprises',
-                    name: 'Enterprises',
+                    path: 'table',
+                    name: 'Table',
                     component: () => import('@/views/basic_functions/substance_management/table'),
                     meta: {
                         title: '表格数据',

@@ -2,20 +2,47 @@
     <div>
         <page-header title="数据来源">
             <template #content>
-                <div>
-                    <div class="inLine">
+                <el-row>
+                    <el-col>
                         <p class="hover" @click="back">返回上一页</p>
-                    </div>
-                    <div>
-                        此页为系统监控设置
-                    </div>
-                </div>
+                    </el-col>
+                </el-row>
             </template>
         </page-header>
-        <page-main title="数据源选择">
 
+        <page-main title="数据来源">
+            <el-descriptions class="margin-top" title="当前使用数据库信息" :column="2" border>
+                <template slot="extra">
+                    <el-button type="primary" size="small" @click="dialogSelect = true">操作</el-button>
+                </template>
+                <el-descriptions-item>
+                    <template slot="label">
+                        数据库名
+                    </template>
+                    created_by_shellwe
+                </el-descriptions-item>
+                <el-descriptions-item>
+                    <template slot="label">
+                        数据归属
+                    </template>
+                    本地数据
+                </el-descriptions-item>
+                <el-descriptions-item>
+                    <template slot="label">
+                        更新日期
+                    </template>
+                    2022-04-19
+                </el-descriptions-item>
+                <el-descriptions-item>
+                    <template slot="label">
+                        备注信息
+                    </template>
+                    <el-tag size="small">基本数据库</el-tag>
+                </el-descriptions-item>
+            </el-descriptions>
         </page-main>
-        <page-main v-show="pageMainShow" title="数据信息">
+
+        <page-main title="数据信息">
             <el-table :data="pageDataList" border stripe highlight-current-row>
                 <el-table-column type="index" label="序列" width="50px" />
                 <el-table-column prop="userName" label="placeholder1" />
@@ -25,6 +52,35 @@
                 <el-table-column prop="date" label="placeholder5" />
             </el-table>
         </page-main>
+        <el-dialog
+            title="数据调整"
+            :visible.sync="dialogSelect"
+            width="30%"
+            :before-close="handleClose"
+        >
+            <el-row>
+                <el-col :span="6" style="padding-top: 5px;">
+                    <span>选择数据库</span>
+                </el-col>
+                <el-col :span="10">
+                    <el-select v-model="selectData" placeholder="请选择">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+            </el-row>
+            <el-row>
+
+            </el-row>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogSelect = false">取 消</el-button>
+                <el-button type="primary" @click="dialogSelect = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -37,7 +93,18 @@ export default {
     components: {PageMain, PageHeader},
     data() {
         return {
-            pageSwitchShow: true,
+            options: [{
+                value: '选项1',
+                label: '数据库一'
+            }, {
+                value: '选项2',
+                label: '数据库二'
+            }, {
+                value: '选项3',
+                label: '爬虫获取'
+            }],
+            selectData: '',
+            dialogSelect: false,
             pageMainShow: true,
             pageDataList: [{}]
         }
@@ -53,6 +120,13 @@ export default {
     methods: {
         back() {
             history.go(-1)
+        },
+        handleClose(done) {
+            this.$confirm('确认取消？')
+                .then(() => {
+                    done()
+                })
+                .catch(() => {})
         },
         handleSwitchChange() {
             this.pageMainShow = !this.pageMainShow

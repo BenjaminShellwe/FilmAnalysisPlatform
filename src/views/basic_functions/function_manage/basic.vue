@@ -7,7 +7,7 @@
                 </div>
             &nbsp;
                 <div class="inLine">
-                    此页为placeholder的基本设置
+                    此页为前端主题设置
                 </div>
             </template>
         </page-header>

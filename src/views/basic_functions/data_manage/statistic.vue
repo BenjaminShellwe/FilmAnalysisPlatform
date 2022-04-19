@@ -847,9 +847,6 @@
                 </el-card>
             </el-row>
         </page-main>
-        <page-main title="placeholder">
-            设计中
-        </page-main>
     </div>
 </template>
 

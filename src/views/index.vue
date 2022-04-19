@@ -14,11 +14,11 @@
             <el-row style="margin: 0 10px;">
                 <el-col :span="12" class="Echarts">
                     <el-card id="chartsGraph" shadow="hover" style="margin: 50px; padding: 25px; background-color: rgb(244, 251, 252);" />
-                    <span style="text-align: center; cursor: pointer;"><h1>图形可视化数据</h1></span>
+                    <span style="text-align: center; cursor: pointer;" @click="onIconClick('Graphic',true)"><h1>图形可视化数据</h1></span>
                 </el-col>
                 <el-col :span="12" class="Echarts">
                     <el-card id="chartsTable" shadow="hover" style="margin: 50px; padding: 25px; background-color: rgb(239, 239, 239);" />
-                    <span style="text-align: center; cursor: pointer;"><h1>表格可视化数据</h1></span>
+                    <span style="text-align: center; cursor: pointer;" @click="onIconClick('Table',true)"><h1>表格可视化数据</h1></span>
                 </el-col>
             </el-row>
         </page-main>
@@ -27,7 +27,8 @@
 
 <script>
 import PageMain from '@/components/PageMain'
-import axios from 'axios'
+import router from '@/router'
+// import axios from 'axios'
 
 export default {
     name: 'IndexPage',
@@ -43,7 +44,7 @@ export default {
         }
     },
     created() {
-        this.handleGetInfo()
+
     },
     mounted() {
         this.echartsGraph()
@@ -53,56 +54,30 @@ export default {
         open(url) {
             window.open(url, 'top')
         },
-        handleGetInfo() {
-            const that = this
-            axios({
-                method: 'post',
-                url: '/queryInfo/employee',
-                data: {
-                    userID: this.pageQueryValue
+        onIconClick(val, state) {
+            function executeFunc(val) {
+                if (val == 'Graphic') {
+                    router.push({path: '/multilevel_menu_basic/substance_management/graphic'})
+                } if (val == 'Table') {
+                    router.push({path: '/multilevel_menu_basic/substance_management/table'})
+                }  else {
+                    console.log('Receiving an error!')
                 }
-            }).then(function(response) {
-                let keys = []
-                if (response.data.data[0] === '') {
-                    that.enterprise = null
-                } else {
-                    for (let property in response.data.data[0]) {
-                        keys.push(property)
-                    }
-                    that.pageTableHeaderEnterprise = keys
-                    // console.log(that.pageTableHeaderEnterprise)
-                    that.enterprise = response.data.data[0]
-                    // console.log(that.enterprise)
-                }
-            }).catch(function(error) {
-                console.log(error)
-            })
-            axios({
-                method: 'post',
-                url: '/queryInfo/personal',
-                data: {
-                    userID: this.pageQueryValue
-                }
-            }).then(function(response) {
-                let keys = []
-                if (response.data.data[0] === '') {
-                    that.personal = null
-                } else {
-                    for (let property in response.data.data[0]) {
-                        keys.push(property)
-                    }
-                    that.pageTableHeaderEnterprise = keys
-                    // console.log(that.pageTableHeaderEnterprise)
-                    that.personal = response.data.data[0]
-                    // console.log(that.personal)
-                }
-            }).catch(function(error) {
-                console.log(error)
-            })
+            }
+
+            if (state !== true) {
+                this.$message({
+                    message: `clicking ${val}, is under construction`,
+                    type: 'info'
+                })
+            } else {
+                executeFunc(val)
+                console.log('执行')
+            }
         },
         // 此函数对应左边动态图形，修改前请查阅echarts官方文档
         echartsGraph() {
-            var chartGraph = this.$echarts.init(document.getElementById('chartsGraph'), null, {width: 400, height: 137})
+            var chartGraph = this.$echarts.init(document.getElementById('chartsGraph'), null, {width: 620, height: 137})
             var option = {
                 graphic: {
                     elements: [
@@ -112,7 +87,7 @@ export default {
                             top: 'center',
                             children: new Array(20).fill(0).map((val, i) => ({
                                 type: 'rect',
-                                x: i * 20,
+                                x: i * 30,
                                 shape: {
                                     x: 0,
                                     y: -40,
