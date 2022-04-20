@@ -60,8 +60,8 @@
                 <el-col :span="8">
                     <el-card body-style="padding: 2px;" style="margin: 5px; padding: 5px; background-color: rgb(246, 252, 244);" shadow="hover">
                         <div slot="header" class="clearfix">
-                            <span>各数据图占比</span>
-                            <el-button style="float: right; padding: 3px 0;" type="text">placeholder</el-button>
+                            <span>随机任意电影好评度</span>
+                            <el-button style="float: right; padding: 3px 0;" type="text" @click="refreshPercentage">立即刷新</el-button>
                         </div>
                         <div id="chartsPercentage" />
                     </el-card>
@@ -113,33 +113,135 @@ export default {
     data() {
         return {
             pageCountAll: 0,
-            pageDate: 0
+            pageDate: 0,
+            pageYears: [],
+            pageFilm: {}
         }
     },
     mounted() {
         this.echartsGraph()
-        this.countAll()
     },
     methods: {
         back() {
             history.go(-1)
         },
-        countAll() {
-            axios({
-                method: 'get',
-                url: '/film/count'
-            }).then(response => {
-                // console.log(response.data)
-                this.pageCountAll = response.data.data
-            }).catch(error => {
-                console.log(error)
+        refreshPercentage() {
+            var chartPercentage = this.$echarts.init(document.getElementById('chartsPercentage'), null, {width: 480, height: 485})
+            axios({method: 'get', url: '/film/randomFilm'}).then(response => {
+                let nextTitle = response.data.data[0].title
+                let nextSource = [[1, Math.round(response.data.data[0].score / 10 * 200)]]
+                chartPercentage.setOption({
+                    title: {
+                        text: nextTitle
+                    },
+                    dataset: {
+                        source: nextSource
+                    }
+                })
             })
-            axios({
-                method: 'post',
-                url: '/user/updateTime'
-            }).then(response => {
-                // console.log(response.data)
-                this.pageDate = formatDate(response.data.data)
+        },
+        // 此函数对应动态图形，修改前请查阅echarts官方文档
+        // 如果对vue生命周期不熟悉,请不要变更函数执行顺序,不然图表将无法正常获取数据
+        echartsGraph() {
+            this.$echarts.use([
+                TooltipComponent,
+                VisualMapComponent,
+                Grid3DComponent,
+                Bar3DChart,
+                CanvasRenderer
+            ])
+            // chartGraph 数据
+            let date2 = []
+            let data2 = []
+            // chartHistogram 数据
+            let xAxisData = []
+            let data3 = []
+            let data4 = []
+
+            // 请求数据
+            axios.all([
+                axios({method: 'get', url: '/film/count'}),
+                axios({method: 'post', url: '/user/updateTime'}),
+                axios({method: 'get', url: '/film/yearsCount'}),
+                axios({method: 'post', url: '/film/budgetFilm', data: {i: 0, j: 19}})
+            ]).then(response => {
+                // console.log(response)
+                this.pageCountAll = response[0].data.data
+                this.pageDate = formatDate(response[1].data.data)
+                this.pageYears = response[2].data.data
+                for (let i = 0; i < this.pageYears.length; i++) {
+                    date2.push(this.pageYears[i].release)
+                    data2.push(this.pageYears[i].total + 0)
+                }
+                for (let i = 0; i < 20; i++) {
+                    xAxisData.push(response[3].data.data[i].title)
+                    data3.push(response[3].data.data[i].boxoffice)
+                    data4.push(response[3].data.data[i].budget)
+                }
+                chartGraph.setOption(option)
+                chartPercentage.setOption(optionUni)
+                chartHistogram.setOption(optionBin)
+                chartSingleRadar.setOption(optionTer)
+                chartTransparent.setOption(optionQua)
+                setInterval(function() {
+                    axios({method: 'get', url: '/film/randomFilm'}).then(response => {
+                        let nextTitle = response.data.data[0].title
+                        let nextSubtext = response.data.data[0].director
+                        let nextSource = [[1, Math.round(response.data.data[0].score / 10 * _valOnRadianMax)]]
+                        // console.log(nextSource)
+                        // var nextSource = [[1, Math.round(Math.random() * _valOnRadianMax)]]
+                        chartPercentage.setOption({
+                            title: {
+                                text: nextTitle,
+                                subtext: nextSubtext
+                            },
+                            dataset: {
+                                source: nextSource
+                            }
+                        })
+                    })
+                }, 10000)
+
+                chartGraph.getZr().on('click', params => {
+                    this.$notify.warning({
+                        title: '提示 执行动作' + params.type,
+                        message: '由于拖拽事件覆盖,本图形无法提供鼠标点击事件',
+                        duration: 5500
+                    })
+                })
+                // 我累了不想再复写点击事件了
+                // chartPercentage.on('click',  params => {
+                //     console.log(params)
+                //     this.$notify.info({
+                //         title: '提示',
+                //         message: '触发点击事件2',
+                //         duration: 6000
+                //     })
+                // })
+                // chartPercentage.on('click', function(params) {
+                //     console.log(params.name)
+                //     that.$notify({
+                //         title: '提示',
+                //         message: '触发点击事件3',
+                //         duration: 3000
+                //     })
+                // })
+                // chartPercentage.on('click', function(params) {
+                //     console.log(params.name)
+                //     that.$notify({
+                //         title: '提示',
+                //         message: '触发点击事件4',
+                //         duration: 3000
+                //     })
+                // })
+                // chartPercentage.on('click', function(params) {
+                //     console.log(params.name)
+                //     this.$notify({
+                //         title: '提示',
+                //         message: '触发点击事件5',
+                //         duration: 3000
+                //     })
+                // })
             }).catch(error => {
                 console.log(error)
             })
@@ -154,25 +256,7 @@ export default {
                 return YY + MM + DD
                 // return YY + MM + DD + ' ' + hh + mm + ss
             }
-        },
-        // 此函数对应动态图形，修改前请查阅echarts官方文档
-        echartsGraph() {
-            this.$echarts.use([
-                TooltipComponent,
-                VisualMapComponent,
-                Grid3DComponent,
-                Bar3DChart,
-                CanvasRenderer
-            ])
-            let base = +new Date(1968, 9, 3)
-            let oneDay = 24 * 3600 * 1000
-            let date1 = []
-            let data1 = [Math.random() * 300]
-            for (let i = 1; i < 20000; i++) {
-                var now = new Date((base += oneDay))
-                date1.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'))
-                data1.push(Math.round((Math.random() - 0.5) * 20 + data1[i - 1]))
-            }
+            // 不同年份上映电影数量
             var chartGraph = this.$echarts.init(document.getElementById('chartsGraph'), null, {width: 990, height: 550})
             var option = {
                 tooltip: {
@@ -183,7 +267,7 @@ export default {
                 },
                 title: {
                     left: 'center',
-                    text: 'Large Area Chart'
+                    text: '不同年份上映电影数量'
                 },
                 toolbox: {
                     feature: {
@@ -197,7 +281,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: date1
+                    data: date2
                 },
                 yAxis: {
                     type: 'value',
@@ -207,16 +291,16 @@ export default {
                     {
                         type: 'inside',
                         start: 0,
-                        end: 10
+                        end: 5
                     },
                     {
                         start: 0,
-                        end: 10
+                        end: 5
                     }
                 ],
                 series: [
                     {
-                        name: 'Fake Data',
+                        name: '上映数',
                         type: 'line',
                         symbol: 'none',
                         sampling: 'lttb',
@@ -235,11 +319,13 @@ export default {
                                 }
                             ])
                         },
-                        data: data1
+                        data: data2
                     }
                 ]
             }
 
+            // 随机任意电影好评度
+            // 请勿随意修改动画加载函数
             var ROOT_PATH = 'https://cdn.jsdelivr.net/gh/apache/echarts-website@asf-site/examples'
             var _panelImageURL = ROOT_PATH + '/data/asset/img/custom-gauge-panel.png'
             var _animationDuration = 1000
@@ -370,17 +456,23 @@ export default {
                 }
                 return ((valOnRadian / _valOnRadianMax) * 100).toFixed(0) + '%'
             }
-
+            // 图形加载函数
             var chartPercentage = this.$echarts.init(document.getElementById('chartsPercentage'), null, {width: 480, height: 485})
             var optionUni = {
                 animationEasing: _animationEasingUpdate,
                 animationDuration: _animationDuration,
                 animationDurationUpdate: _animationDurationUpdate,
                 animationEasingUpdate: _animationEasingUpdate,
-                dataset: {
-                    source: [[1, 156]]
+                title: {
+                    text: '正在等待后台处理数据',
+                    subtext: ''
                 },
-                tooltip: {},
+                dataset: {
+                    source: [[1, 0]]
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
                 angleAxis: {
                     type: 'value',
                     startAngle: 0,
@@ -401,117 +493,74 @@ export default {
                     }
                 ]
             }
-            setInterval(function() {
-                var nextSource = [[1, Math.round(Math.random() * _valOnRadianMax)]]
-                chartPercentage.setOption({
-                    dataset: {
-                        source: nextSource
-                    }
-                })
-            }, 3000)
 
-            var chartRadar = this.$echarts.init(document.getElementById('chartsMultiRadar'), null, {width: 900, height: 485})
+            var chartHistogram = this.$echarts.init(document.getElementById('chartsMultiRadar'), null, {width: 995, height: 485})
             var optionBin = {
                 title: {
-                    text: 'Multiple Radar'
-                },
-                tooltip: {
-                    trigger: 'axis'
+                    text: '票房预算柱状图'
                 },
                 legend: {
-                    left: 'center',
-                    data: [
-                        'A Software',
-                        'A Phone',
-                        'Another Phone',
-                        'Precipitation',
-                        'Evaporation'
-                    ]
+                    data: ['票房', '预算']
                 },
-                radar: [
-                    {
-                        indicator: [
-                            { text: 'Brand', max: 100 },
-                            { text: 'Content', max: 100 },
-                            { text: 'Usability', max: 100 },
-                            { text: 'Function', max: 100 },
-                            { text: 'placeholder', max: 100 }
-                        ],
-                        center: ['18%', '50%'],
-                        radius: 100
-                    },
-                    {
-                        indicator: [
-                            { text: 'Look', max: 100 },
-                            { text: 'Photo', max: 100 },
-                            { text: 'System', max: 100 },
-                            { text: 'Performance', max: 100 },
-                            { text: 'Screen', max: 100 }
-                        ],
-                        center: ['55%', '50%'],
-                        radius: 100
-                    },
-                    {
-                        indicator: (function() {
-                            var res = []
-                            for (var i = 1; i <= 12; i++) {
-                                res.push({ text: i + '月', max: 100 })
-                            }
-                            return res
-                        })(),
-                        center: ['85%', '50%'],
-                        radius: 100
+                toolbox: {
+                    // y: 'bottom',
+                    feature: {
+                        magicType: {
+                            type: ['stack']
+                        },
+                        dataView: {},
+                        saveAsImage: {
+                            pixelRatio: 2
+                        }
                     }
-                ],
+                },
+                tooltip: {},
+                xAxis: {
+                    data: xAxisData,
+                    nameTextStyle: {
+                        align: 'right'
+                    },
+                    position: 'bottom',
+                    offset: 10,
+                    nameLocation: 'middle',
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 60,
+                        align: 'right'
+                    }
+                },
+                yAxis: {},
                 series: [
                     {
-                        type: 'radar',
-                        tooltip: {
-                            trigger: 'item'
+                        name: '票房',
+                        type: 'bar',
+                        data: data3,
+                        emphasis: {
+                            focus: 'series'
                         },
-                        areaStyle: {},
-                        data: [
-                            {
-                                value: [60, 73, 85, 40],
-                                name: 'A Software'
-                            }
-                        ]
+                        animationDelay: function(idx) {
+                            return idx * 800 + 2500
+                        }
                     },
                     {
-                        type: 'radar',
-                        radarIndex: 1,
-                        areaStyle: {},
-                        data: [
-                            {
-                                value: [85, 90, 90, 95, 95],
-                                name: 'A Phone'
-                            },
-                            {
-                                value: [95, 80, 95, 90, 93],
-                                name: 'Another Phone'
-                            }
-                        ]
-                    },
-                    {
-                        type: 'radar',
-                        radarIndex: 2,
-                        areaStyle: {},
-                        data: [
-                            {
-                                name: 'Precipitation',
-                                value: [
-                                    2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 75.6, 82.2, 48.7, 18.8, 6.0, 2.3
-                                ]
-                            },
-                            {
-                                name: 'Evaporation',
-                                value: [
-                                    2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 35.6, 62.2, 32.6, 20.0, 6.4, 3.3
-                                ]
-                            }
-                        ]
+                        name: '预算',
+                        type: 'bar',
+                        data: data4,
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        animationDelay: function(idx) {
+                            return idx * 800 + 2500
+                        }
                     }
-                ]
+                ],
+                animationEasing: 'elasticOut',
+                animationDelayUpdate: function(idx) {
+                    return idx * 5
+                }
             }
 
             var chartSingleRadar = this.$echarts.init(document.getElementById('chartsSingleRadar'), null, {width: 480, height: 485})
@@ -530,7 +579,7 @@ export default {
                     bottom: 10,
                     data: (function() {
                         var list = []
-                        for (var i = 1; i <= 28; i++) {
+                        for (var i = 1; i <= 16; i++) {
                             list.push(i + 2000 + '')
                         }
                         return list
@@ -544,16 +593,16 @@ export default {
                 },
                 radar: {
                     indicator: [
-                        { text: 'IE8-', max: 400 },
-                        { text: 'IE9+', max: 400 },
-                        { text: 'Safari', max: 400 },
-                        { text: 'Firefox', max: 400 },
-                        { text: 'Chrome', max: 400 }
+                        { text: '票房', max: 90000000 },
+                        { text: '受欢迎程度', max: 200 },
+                        { text: '时长', max: 200 },
+                        { text: '评分', max: 10 },
+                        { text: '评价人数', max: 9000 }
                     ]
                 },
                 series: (function() {
                     var series = []
-                    for (var i = 1; i <= 28; i++) {
+                    for (var i = 1; i <= 16; i++) {
                         series.push({
                             type: 'radar',
                             symbol: 'none',
@@ -665,11 +714,7 @@ export default {
             }
 
             // 配置图表
-            chartGraph.setOption(option)
-            chartPercentage.setOption(optionUni)
-            chartRadar.setOption(optionBin)
-            chartSingleRadar.setOption(optionTer)
-            chartTransparent.setOption(optionQua)
+
         }
     }
 }
