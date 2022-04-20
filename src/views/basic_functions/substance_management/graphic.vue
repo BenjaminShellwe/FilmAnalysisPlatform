@@ -623,7 +623,7 @@ export default {
                                         i * 9,
                                         (i * i) / 2
                                     ],
-                                    name: i + 2000 + ''
+                                    name: i + ''
                                 }
                             ]
                         })
