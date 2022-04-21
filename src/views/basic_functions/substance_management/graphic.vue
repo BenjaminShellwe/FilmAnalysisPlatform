@@ -33,22 +33,22 @@
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px; padding: 10px; background-color: rgba(118, 125, 240, 0.3);" shadow="hover">
-                    电影数据筛选(控制入口)
+                    电影数据筛选(不实现)
                 </el-card>
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px; padding: 10px; background-color: rgba(84, 183, 254, 0.3);" shadow="hover">
-                    特别关注电影
+                    特别关注电影(功能已足够)
                 </el-card>
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px; padding: 10px; background-color: rgba(130, 243, 195, 0.3);" shadow="hover">
-                    自建数据列表
+                    自建数据列表(不实现)
                 </el-card>
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px 20px 10px; padding: 10px 20px 10px; background-color: rgba(56, 205, 236, 0.3);" shadow="hover">
-                    颜色可自行更改
+                    颜色自行更改
                 </el-card>
             </el-col>
         </el-row>
@@ -84,16 +84,22 @@
             </el-row>
         </page-main>
         <el-dialog
-            title="来自shellwe的警告"
+            :title="dialogTitle"
             width="30%"
+            :visible.sync="pageVisible"
         >
-            <span>
-                开发中 暂时拒绝提交至后台 数据未更改<br>
-                此页面将会优先开发placeholder
-            </span>
+            <el-descriptions title="垂直带边框列表" direction="vertical" :column="4" border>
+                <el-descriptions-item label="用户名">kooriookami</el-descriptions-item>
+                <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
+                <el-descriptions-item label="居住地" :span="2">苏州市</el-descriptions-item>
+                <el-descriptions-item label="备注">
+                    <el-tag size="small">学校</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
+            </el-descriptions>
             <span slot="footer" class="dialog-footer">
                 <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
-                <el-button type="primary">明 白</el-button>
+                <el-button type="primary" @click="pageVisible = false">明 白</el-button>
             </span>
         </el-dialog>
     </div>
@@ -112,6 +118,8 @@ export default {
     components: {PageMain},
     data() {
         return {
+            dialogTitle: '',
+            pageVisible: false,
             pageCountAll: 0,
             pageDate: 0,
             pageYears: [],
@@ -124,6 +132,9 @@ export default {
     methods: {
         back() {
             history.go(-1)
+        },
+        handleWakeUpDialog() {
+            this.pageVisible = true
         },
         refreshPercentage() {
             var chartPercentage = this.$echarts.init(document.getElementById('chartsPercentage'), null, {width: 480, height: 485})
@@ -157,7 +168,8 @@ export default {
             let xAxisData = []
             let data3 = []
             let data4 = []
-
+            // 3D 数据
+            let data5 = []
             // 请求数据
             axios.all([
                 axios({method: 'get', url: '/film/count'}),
@@ -177,12 +189,39 @@ export default {
                     xAxisData.push(response[3].data.data[i].title)
                     data3.push(response[3].data.data[i].boxoffice)
                     data4.push(response[3].data.data[i].budget)
+                    data5.push([
+                        Math.round(response[3].data.data[i].boxoffice / 100000000), Math.round(response[3].data.data[i].budget / 100000000), Math.round(response[3].data.data[i].boxoffice / 100000000)
+                    ])
+
                 }
                 chartGraph.setOption(option)
                 chartPercentage.setOption(optionUni)
                 chartHistogram.setOption(optionBin)
                 chartSingleRadar.setOption(optionTer)
                 chartTransparent.setOption(optionQua)
+                chartSingleRadar.setOption({
+                    series: (function() {
+                        var series = []
+                        for (var i = 0; i < 20; i++) {
+                            series.push({
+                                data: [
+                                    {
+                                        value: [
+                                            response[3].data.data[i].boxoffice,
+                                            response[3].data.data[i].popularity,
+                                            response[3].data.data[i].duration,
+                                            response[3].data.data[i].score,
+                                            response[3].data.data[i].evaluators
+                                        ],
+                                        name: response[3].data.data[i].title + ''
+                                    }
+                                ]
+                            })
+                        }
+                        return series
+                    })()
+                })
+
                 setInterval(function() {
                     axios({method: 'get', url: '/film/randomFilm'}).then(response => {
                         let nextTitle = response.data.data[0].title
@@ -210,38 +249,26 @@ export default {
                     })
                 })
                 // 我累了不想再复写点击事件了
-                // chartPercentage.on('click',  params => {
-                //     console.log(params)
-                //     this.$notify.info({
-                //         title: '提示',
-                //         message: '触发点击事件2',
-                //         duration: 6000
-                //     })
-                // })
-                // chartPercentage.on('click', function(params) {
-                //     console.log(params.name)
-                //     that.$notify({
-                //         title: '提示',
-                //         message: '触发点击事件3',
-                //         duration: 3000
-                //     })
-                // })
-                // chartPercentage.on('click', function(params) {
-                //     console.log(params.name)
-                //     that.$notify({
-                //         title: '提示',
-                //         message: '触发点击事件4',
-                //         duration: 3000
-                //     })
-                // })
-                // chartPercentage.on('click', function(params) {
-                //     console.log(params.name)
-                //     this.$notify({
-                //         title: '提示',
-                //         message: '触发点击事件5',
-                //         duration: 3000
-                //     })
-                // })
+                chartPercentage.on('click',  params => {
+                    console.log(params)
+                    this.$notify.info({
+                        title: '提示',
+                        message: '触发点击事件,开启详情页面',
+                        duration: 3000
+                    })
+                    setTimeout(() => {
+                        this.handleWakeUpDialog()
+                    }, 1500)
+
+                })
+                chartHistogram.on('click',  params => {
+                    console.log(params)
+                    this.$notify.info({
+                        title: '提示',
+                        message: '触发事件,将进行年份范围选择',
+                        duration: 6000
+                    })
+                })
             }).catch(error => {
                 console.log(error)
             })
@@ -562,12 +589,12 @@ export default {
                     return idx * 5
                 }
             }
-
+            // 雷达图
             var chartSingleRadar = this.$echarts.init(document.getElementById('chartsSingleRadar'), null, {width: 480, height: 485})
             var optionTer = {
                 title: {
-                    text: 'Proportion of Browsers',
-                    subtext: 'Fake Data',
+                    text: '综合信息雷达图',
+                    subtext: '左侧预算图中电影数据',
                     top: 10,
                     left: 10
                 },
@@ -579,13 +606,15 @@ export default {
                     bottom: 10,
                     data: (function() {
                         var list = []
-                        for (var i = 1; i <= 16; i++) {
-                            list.push(i + 2000 + '')
+                        for (var i = 0; i < 20; i++) {
+                            list.push(i + '')
                         }
                         return list
                     })()
                 },
                 visualMap: {
+                    min: 0,
+                    max: 11800,
                     top: 'top',
                     right: 10,
                     color: ['red', 'yellow'],
@@ -593,16 +622,16 @@ export default {
                 },
                 radar: {
                     indicator: [
-                        { text: '票房', max: 90000000 },
-                        { text: '受欢迎程度', max: 200 },
+                        { text: '票房', max: 2000000000 },
+                        { text: '受欢迎度', max: 200 },
                         { text: '时长', max: 200 },
                         { text: '评分', max: 10 },
-                        { text: '评价人数', max: 9000 }
+                        { text: '评价人数', max: 12000 }
                     ]
                 },
                 series: (function() {
                     var series = []
-                    for (var i = 1; i <= 16; i++) {
+                    for (var i = 0; i < 20; i++) {
                         series.push({
                             type: 'radar',
                             symbol: 'none',
@@ -617,11 +646,11 @@ export default {
                             data: [
                                 {
                                     value: [
-                                        (40 - i) * 10,
-                                        (38 - i) * 4 + 60,
-                                        i * 5 + 10,
-                                        i * 9,
-                                        (i * i) / 2
+                                        i,
+                                        i,
+                                        i,
+                                        i - 5,
+                                        i
                                     ],
                                     name: i + ''
                                 }
@@ -632,15 +661,12 @@ export default {
                 })()
             }
 
-            // prettier-ignore
-            var hours = ['12a', '1a', '2a', '3a', '4a', '5a', '6a', '7a', '8a', '9a', '10a', '11a', '12p', '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p', '9p', '10p', '11p']
-            // prettier-ignore
-            var days = ['Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday', 'Sunday']
-            // prettier-ignore
-            var data = [[0, 0, 5], [0, 1, 1], [0, 2, 0], [0, 3, 0], [0, 4, 0], [0, 5, 0], [0, 6, 0], [0, 7, 0], [0, 8, 0], [0, 9, 0], [0, 10, 0], [0, 11, 2], [0, 12, 4], [0, 13, 1], [0, 14, 1], [0, 15, 3], [0, 16, 4], [0, 17, 6], [0, 18, 4], [0, 19, 4], [0, 20, 3], [0, 21, 3], [0, 22, 2], [0, 23, 5], [1, 0, 7], [1, 1, 0], [1, 2, 0], [1, 3, 0], [1, 4, 0], [1, 5, 0], [1, 6, 0], [1, 7, 0], [1, 8, 0], [1, 9, 0], [1, 10, 5], [1, 11, 2], [1, 12, 2], [1, 13, 6], [1, 14, 9], [1, 15, 11], [1, 16, 6], [1, 17, 7], [1, 18, 8], [1, 19, 12], [1, 20, 5], [1, 21, 5], [1, 22, 7], [1, 23, 2], [2, 0, 1], [2, 1, 1], [2, 2, 0], [2, 3, 0], [2, 4, 0], [2, 5, 0], [2, 6, 0], [2, 7, 0], [2, 8, 0], [2, 9, 0], [2, 10, 3], [2, 11, 2], [2, 12, 1], [2, 13, 9], [2, 14, 8], [2, 15, 10], [2, 16, 6], [2, 17, 5], [2, 18, 5], [2, 19, 5], [2, 20, 7], [2, 21, 4], [2, 22, 2], [2, 23, 4], [3, 0, 7], [3, 1, 3], [3, 2, 0], [3, 3, 0], [3, 4, 0], [3, 5, 0], [3, 6, 0], [3, 7, 0], [3, 8, 1], [3, 9, 0], [3, 10, 5], [3, 11, 4], [3, 12, 7], [3, 13, 14], [3, 14, 13], [3, 15, 12], [3, 16, 9], [3, 17, 5], [3, 18, 5], [3, 19, 10], [3, 20, 6], [3, 21, 4], [3, 22, 4], [3, 23, 1], [4, 0, 1], [4, 1, 3], [4, 2, 0], [4, 3, 0], [4, 4, 0], [4, 5, 1], [4, 6, 0], [4, 7, 0], [4, 8, 0], [4, 9, 2], [4, 10, 4], [4, 11, 4], [4, 12, 2], [4, 13, 4], [4, 14, 4], [4, 15, 14], [4, 16, 12], [4, 17, 1], [4, 18, 8], [4, 19, 5], [4, 20, 3], [4, 21, 7], [4, 22, 3], [4, 23, 0], [5, 0, 2], [5, 1, 1], [5, 2, 0], [5, 3, 3], [5, 4, 0], [5, 5, 0], [5, 6, 0], [5, 7, 0], [5, 8, 2], [5, 9, 0], [5, 10, 4], [5, 11, 1], [5, 12, 5], [5, 13, 10], [5, 14, 5], [5, 15, 7], [5, 16, 11], [5, 17, 6], [5, 18, 0], [5, 19, 5], [5, 20, 3], [5, 21, 4], [5, 22, 2], [5, 23, 0], [6, 0, 1], [6, 1, 0], [6, 2, 0], [6, 3, 0], [6, 4, 0], [6, 5, 0], [6, 6, 0], [6, 7, 0], [6, 8, 0], [6, 9, 0], [6, 10, 1], [6, 11, 0], [6, 12, 2], [6, 13, 1], [6, 14, 3], [6, 15, 4], [6, 16, 0], [6, 17, 0], [6, 18, 0], [6, 19, 0], [6, 20, 1], [6, 21, 2], [6, 22, 2], [6, 23, 6]]
-
+            // 3D表格图控制代码
             var chartTransparent = this.$echarts.init(document.getElementById('chartsTransparent'), null, {width: 1500, height: 485})
             var optionQua = {
+                title: {
+                    text: '票房柱 单位: 亿元'
+                },
                 tooltip: {},
                 visualMap: {
                     max: 20,
@@ -661,12 +687,10 @@ export default {
                     }
                 },
                 xAxis3D: {
-                    type: 'category',
-                    data: hours
+                    type: 'category'
                 },
                 yAxis3D: {
-                    type: 'category',
-                    data: days
+                    type: 'category'
                 },
                 zAxis3D: {
                     type: 'value'
@@ -679,18 +703,15 @@ export default {
                             intensity: 1.2
                         },
                         ambient: {
-                            intensity: 0.3
+                            intensity: 0.6
                         }
                     }
                 },
                 series: [
                     {
+                        name: '区间一',
                         type: 'bar3D',
-                        data: data.map(function(item) {
-                            return {
-                                value: [item[1], item[0], item[2]]
-                            }
-                        }),
+                        data: data5,
                         shading: 'color',
                         label: {
                             show: true,
