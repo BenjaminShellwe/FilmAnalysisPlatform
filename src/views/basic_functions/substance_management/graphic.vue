@@ -85,21 +85,33 @@
         </page-main>
         <el-dialog
             :title="dialogTitle"
-            width="30%"
+            width="50%"
             :visible.sync="pageVisible"
+            :before-close="handleResetValue"
         >
-            <el-descriptions title="垂直带边框列表" direction="vertical" :column="4" border>
-                <el-descriptions-item label="用户名">kooriookami</el-descriptions-item>
-                <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
-                <el-descriptions-item label="居住地" :span="2">苏州市</el-descriptions-item>
-                <el-descriptions-item label="备注">
-                    <el-tag size="small">学校</el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
-            </el-descriptions>
+            <el-row>
+                <el-col v-show="descVisible">
+                    <el-descriptions :title="descTitle" direction="vertical" :column="3" border>
+                        <el-descriptions-item label="名称">{{ film.Title }}</el-descriptions-item>
+                        <el-descriptions-item label="主演">{{ film.Star }}</el-descriptions-item>
+                        <el-descriptions-item label="类型">{{ film.Type }}</el-descriptions-item>
+                        <el-descriptions-item label="语言">
+                            <el-tag size="small">{{ film.Language }}</el-tag>
+                        </el-descriptions-item>
+                        <el-descriptions-item label="地区">{{ film.Country }}</el-descriptions-item>
+                        <el-descriptions-item label="导演">{{ film.Director }}</el-descriptions-item>
+                        <el-descriptions-item label="关键词">{{ film.Key }}</el-descriptions-item>
+                    </el-descriptions>
+                </el-col>
+                <el-col v-show="descVisible2">
+                    <el-input-number v-model="num" :min="1" :max="4798" label="起始" />
+                    <el-input-number v-model="num1" :min="1" :max="4798" label="结尾" />
+                    <el-button type="primary" @click="handleCounting">确 认</el-button>
+                </el-col>
+            </el-row>
             <span slot="footer" class="dialog-footer">
                 <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
-                <el-button type="primary" @click="pageVisible = false">明 白</el-button>
+                <el-button type="primary" @click="pageVisible = false">已 阅</el-button>
             </span>
         </el-dialog>
     </div>
@@ -118,7 +130,22 @@ export default {
     components: {PageMain},
     data() {
         return {
+            num: 1,
+            num1: 20,
             dialogTitle: '',
+            descTitle: '',
+            descVisible: false,
+            descVisible2: false,
+            film: {
+                Title: '',
+                Star: [],
+                Type: [],
+                Language: [],
+                Country: [],
+                Director: [],
+                Key: []
+            },
+            pageTransfer: {},
             pageVisible: false,
             pageCountAll: 0,
             pageDate: 0,
@@ -133,8 +160,113 @@ export default {
         back() {
             history.go(-1)
         },
-        handleWakeUpDialog() {
+        handleWakeUpDialog(val, desc) {
+            if (desc === 1) {
+                this.descVisible = true
+                this.film.Title = val.title
+                this.film.Star = val.star
+                this.film.Type = val.type
+                this.film.Language = val.language
+                this.film.Country = val.country
+                this.film.Director = val.director
+                this.film.Key = val.keyword
+                this.dialogTitle = '电影详情'
+            }
+            if (desc === 2) {
+                this.descVisible2 = true
+                this.dialogTitle = val
+                this.descVisible = false
+
+            }
             this.pageVisible = true
+        },
+        handleCounting() {
+            if ((this.num1 - 1) - (this.num - 1) <= 20) {
+                axios({
+                    method: 'post',
+                    url: '/film/budgetFilm',
+                    data: {i: (this.num - 1), j: (this.num1 - 1)}
+                }).then(response => {
+                    var chartHistogram = this.$echarts.init(document.getElementById('chartsMultiRadar'), null, {width: 995, height: 485})
+                    var chartTransparent = this.$echarts.init(document.getElementById('chartsTransparent'), null, {width: 1500, height: 485})
+                    let xAxisData = []
+                    let data6 = []
+                    let data7 = []
+                    let data8 = []
+                    for (let i = 0; i < 20; i++) {
+                        xAxisData.push(response.data.data[i].title)
+                        data6.push(response.data.data[i].boxoffice)
+                        data7.push(response.data.data[i].budget)
+                        data8.push([
+                            Math.round(response.data.data[i].boxoffice / 100000000), Math.round(response.data.data[i].budget / 100000000), Math.round(response.data.data[i].boxoffice / 100000000)
+                        ])
+
+                    }
+                    chartHistogram.setOption({
+                        xAxis: {
+                            data: xAxisData
+                        },
+                        series: [
+                            {
+                                name: '票房',
+                                type: 'bar',
+                                data: data6,
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                animationDelay: function(idx) {
+                                    return idx * 800 + 250
+                                }
+                            },
+                            {
+                                name: '预算',
+                                type: 'bar',
+                                data: data7,
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                animationDelay: function(idx) {
+                                    return idx * 800 + 250
+                                }
+                            }
+                        ]
+                    })
+                    chartTransparent.setOption({
+                        series: [
+                            {
+                                name: '区间一',
+                                type: 'bar3D',
+                                data: data8,
+                                shading: 'color',
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    borderWidth: 1
+                                },
+                                itemStyle: {
+                                    opacity: 0.8
+                                },
+                                emphasis: {
+                                    label: {
+                                        fontSize: 20,
+                                        color: '#900'
+                                    },
+                                    itemStyle: {
+                                        color: '#900'
+                                    }
+                                }
+                            }
+                        ]
+                    })
+                })
+            } else {
+                this.$message('年限区间最大为20')
+            }
+        },
+        handleResetValue() {
+            this.film = {}
+            this.descVisible = false
+            this.descVisible2 = false
         },
         refreshPercentage() {
             var chartPercentage = this.$echarts.init(document.getElementById('chartsPercentage'), null, {width: 480, height: 485})
@@ -222,12 +354,13 @@ export default {
                     })()
                 })
 
-                setInterval(function() {
+                setInterval(() => {
                     axios({method: 'get', url: '/film/randomFilm'}).then(response => {
+                        this.pageTransfer = response.data.data[0]
                         let nextTitle = response.data.data[0].title
                         let nextSubtext = response.data.data[0].director
                         let nextSource = [[1, Math.round(response.data.data[0].score / 10 * _valOnRadianMax)]]
-                        // console.log(nextSource)
+                        // console.log(response)
                         // var nextSource = [[1, Math.round(Math.random() * _valOnRadianMax)]]
                         chartPercentage.setOption({
                             title: {
@@ -245,20 +378,20 @@ export default {
                     this.$notify.warning({
                         title: '提示 执行动作' + params.type,
                         message: '由于拖拽事件覆盖,本图形无法提供鼠标点击事件',
-                        duration: 5500
+                        duration: 3500
                     })
                 })
                 // 我累了不想再复写点击事件了
-                chartPercentage.on('click',  params => {
-                    console.log(params)
+                chartPercentage.on('click',  () => {
+                    // console.log()
                     this.$notify.info({
                         title: '提示',
-                        message: '触发点击事件,开启详情页面',
+                        message: '触发事件,开启详情页面',
                         duration: 3000
                     })
                     setTimeout(() => {
-                        this.handleWakeUpDialog()
-                    }, 1500)
+                        this.handleWakeUpDialog(this.pageTransfer, 1)
+                    }, 800)
 
                 })
                 chartHistogram.on('click',  params => {
@@ -266,8 +399,11 @@ export default {
                     this.$notify.info({
                         title: '提示',
                         message: '触发事件,将进行年份范围选择',
-                        duration: 6000
+                        duration: 3000
                     })
+                    setTimeout(() => {
+                        this.handleWakeUpDialog('年份范围选择', 2)
+                    }, 800)
                 })
             }).catch(error => {
                 console.log(error)
