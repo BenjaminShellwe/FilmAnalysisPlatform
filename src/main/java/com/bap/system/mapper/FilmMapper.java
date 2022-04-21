@@ -31,7 +31,7 @@ public interface FilmMapper extends BaseMapper<FilmData> {
     @Select("SELECT score, f1, title, director FROM data1 ORDER BY RAND() LIMIT 1")
     List<Map<String, Integer>> randomFilm();
 
-    @Select("SELECT data1.budget, data1.boxoffice, data1.title " +
+    @Select("SELECT data1.budget, data1.boxoffice, data1.title, data1.popularity, data1.duration, data1.evaluators, data1.score, data1.release " +
             "FROM data1 " +
             "WHERE data1.f1 BETWEEN #{i} AND #{j} " +
             "GROUP BY  data1.f1")
