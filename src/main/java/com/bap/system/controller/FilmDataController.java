@@ -50,8 +50,13 @@ public class FilmDataController {
     @RequestMapping(value = "/budgetFilm")
     public Result budgetFilm(@RequestBody JSONObject jsonObject) {
         List<Map<String, Integer>> s = filmMapper.budgetFilm(jsonObject.getInteger("i"),jsonObject.getInteger("j"));
-        System.out.println("测试输出" + jsonObject);
-        System.out.println(s);
+        return new Result(s);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/allData")
+    public Result allData() {
+        List<Map<String, Integer>> s = filmMapper.allData();
         return new Result(s);
     }
 }

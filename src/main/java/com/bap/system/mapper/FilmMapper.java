@@ -28,7 +28,7 @@ public interface FilmMapper extends BaseMapper<FilmData> {
             "ORDER BY `release` ASC")
     List<Map<String, Integer>> yearsCount();
 
-    @Select("SELECT score, f1, title, director FROM data1 ORDER BY RAND() LIMIT 1")
+    @Select("SELECT * FROM data1 ORDER BY RAND() LIMIT 1")
     List<Map<String, Integer>> randomFilm();
 
     @Select("SELECT data1.budget, data1.boxoffice, data1.title, data1.popularity, data1.duration, data1.evaluators, data1.score, data1.release " +
@@ -36,4 +36,7 @@ public interface FilmMapper extends BaseMapper<FilmData> {
             "WHERE data1.f1 BETWEEN #{i} AND #{j} " +
             "GROUP BY  data1.f1")
     List<Map<String, Integer>> budgetFilm(int i, int j);
+
+    @Select("SELECT data1.* FROM data1 ORDER BY data1.f1")
+    List<Map<String, Integer>> allData();
 }
