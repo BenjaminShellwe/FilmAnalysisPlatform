@@ -49,8 +49,8 @@ export default {
                     component: () => import('@/views/basic_functions/data_manage/statistic'),
                     meta: {
                         title: '数据统计',
-                        sidebar: true,
-                        breadcrumb: true
+                        sidebar: false,
+                        breadcrumb: false
                     }
                 }
             ]

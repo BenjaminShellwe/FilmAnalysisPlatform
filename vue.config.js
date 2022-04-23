@@ -59,10 +59,10 @@ module.exports = {
     devServer: {
         disableHostCheck: true,
         open: true,
-        port: 8089,
+        port: 8087,
         proxy: {
             '/': {
-                target: 'http://localhost:8085',
+                target: 'http://localhost:8086',
                 changeOrigin: true
             }
         },

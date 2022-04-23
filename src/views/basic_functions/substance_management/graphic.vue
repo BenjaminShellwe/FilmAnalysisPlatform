@@ -55,7 +55,21 @@
         <page-main>
             <el-row class="Echarts">
                 <el-col :span="16">
-                    <el-card id="chartsGraph" shadow="hover" style="margin: 5px; padding: 5px; background-color: rgb(244, 251, 252);" />
+                    <el-tabs v-model="pageTabs">
+                        <el-tab-pane label="不同年份电影数量" name="first">
+                            <el-card id="chartsGraph" shadow="hover" style="margin: 4px; padding: 4px; background-color: rgb(244, 251, 252);" />
+                        </el-tab-pane>
+                        <el-tab-pane label="不同评分电影数量" name="second">
+                            <el-card id="chartsGraphUni" shadow="hover" style="margin: 4px; padding: 4px; background-color: rgb(253, 234, 225);" />
+                        </el-tab-pane>
+                        <el-tab-pane label="不同时长电影数量" name="third">
+                            <el-card id="chartsGraphBin" shadow="hover" style="margin: 4px; padding: 4px; background-color: rgb(239, 253, 225);" />
+                        </el-tab-pane>
+                        <el-tab-pane label="不同票房电影数量" name="fourth">
+                            <el-card id="chartsGraphTer" shadow="hover" style="margin: 4px; padding: 4px; background-color: rgb(240, 225, 253);" />
+                        </el-tab-pane>
+                    </el-tabs>
+
                 </el-col>
                 <el-col :span="8">
                     <el-card body-style="padding: 2px;" style="margin: 5px; padding: 5px; background-color: rgb(246, 252, 244);" shadow="hover">
@@ -145,10 +159,12 @@ export default {
                 Director: [],
                 Key: []
             },
+            pageTabs: 'first',
             pageTransfer: {},
             pageVisible: false,
             pageCountAll: 0,
             pageDate: 0,
+            pageScore: [],
             pageYears: [],
             pageFilm: {}
         }
@@ -296,6 +312,15 @@ export default {
             // chartGraph 数据
             let date2 = []
             let data2 = []
+            // chartGraphUni 数据
+            let date3 = []
+            let data6 = []
+            // chartGraphBin 数据
+            let date4 = []
+            let data7 = []
+            // chartGraphTer 数据
+            let date5 = []
+            let data8 = []
             // chartHistogram 数据
             let xAxisData = []
             let data3 = []
@@ -306,8 +331,11 @@ export default {
             axios.all([
                 axios({method: 'get', url: '/film/count'}),
                 axios({method: 'post', url: '/user/updateTime'}),
-                axios({method: 'get', url: '/film/yearsCount'}),
-                axios({method: 'post', url: '/film/budgetFilm', data: {i: 0, j: 19}})
+                axios({method: 'post', url: '/film/setCount', data: {obj: 'release'}}),
+                axios({method: 'post', url: '/film/budgetFilm', data: {i: 0, j: 19}}),
+                axios({method: 'post', url: '/film/setCount', data: {obj: 'score'}}),
+                axios({method: 'post', url: '/film/durationCount'}),
+                axios({method: 'post', url: '/film/boxofficeCount'})
             ]).then(response => {
                 // console.log(response)
                 this.pageCountAll = response[0].data.data
@@ -326,11 +354,27 @@ export default {
                     ])
 
                 }
+                for (let i = 0; i < response[4].data.data.length; i++) {
+                    date3.push(response[4].data.data[i].score)
+                    data6.push(response[4].data.data[i].total + 0)
+                }
+                for (let i = 0; i < response[5].data.data.length; i++) {
+                    date4.push(response[5].data.data[i].duration)
+                    data7.push(response[5].data.data[i].total + 0)
+                }
+                for (let i = 0; i < response[6].data.data.length; i++) {
+                    date5.push(response[6].data.data[i].boxoffice)
+                    data8.push(response[6].data.data[i].total + 0)
+                }
+
                 chartGraph.setOption(option)
                 chartPercentage.setOption(optionUni)
                 chartHistogram.setOption(optionBin)
                 chartSingleRadar.setOption(optionTer)
                 chartTransparent.setOption(optionQua)
+                chartGraphUni.setOption(optionSen)
+                chartGraphBin.setOption(optionSep)
+                chartGraphTer.setOption(optionOct)
                 chartSingleRadar.setOption({
                     series: (function() {
                         var series = []
@@ -374,13 +418,13 @@ export default {
                     })
                 }, 10000)
 
-                chartGraph.getZr().on('click', params => {
-                    this.$notify.warning({
-                        title: '提示 执行动作' + params.type,
-                        message: '由于拖拽事件覆盖,本图形无法提供鼠标点击事件',
-                        duration: 3500
-                    })
-                })
+                // chartGraph.getZr().on('click', params => {
+                //     this.$notify.warning({
+                //         title: '提示 执行动作' + params.type,
+                //         message: '由于拖拽事件覆盖,本图形无法提供鼠标点击事件',
+                //         duration: 3500
+                //     })
+                // })
                 // 我累了不想再复写点击事件了
                 chartPercentage.on('click',  () => {
                     // console.log()
@@ -419,8 +463,9 @@ export default {
                 return YY + MM + DD
                 // return YY + MM + DD + ' ' + hh + mm + ss
             }
+
             // 不同年份上映电影数量
-            var chartGraph = this.$echarts.init(document.getElementById('chartsGraph'), null, {width: 990, height: 550})
+            var chartGraph = this.$echarts.init(document.getElementById('chartsGraph'), null, {width: 990, height: 500})
             var option = {
                 tooltip: {
                     trigger: 'axis',
@@ -483,6 +528,212 @@ export default {
                             ])
                         },
                         data: data2
+                    }
+                ]
+            }
+
+            // 不同评分电影数量
+            var chartGraphUni = this.$echarts.init(document.getElementById('chartsGraphUni'), null, {width: 990, height: 500})
+            var optionSen = {
+                tooltip: {
+                    trigger: 'axis',
+                    position: function(pt) {
+                        return [pt[0], '10%']
+                    }
+                },
+                title: {
+                    left: 'center',
+                    text: '不同评分已知电影数量'
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: date3
+                },
+                yAxis: {
+                    type: 'value',
+                    boundaryGap: [0, '100%']
+                },
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start: 0,
+                        end: 5
+                    },
+                    {
+                        start: 0,
+                        end: 5
+                    }
+                ],
+                series: [
+                    {
+                        name: '电影数',
+                        type: 'line',
+                        symbol: 'none',
+                        sampling: 'lttb',
+                        itemStyle: {
+                            color: 'rgb(255, 70, 131)'
+                        },
+                        areaStyle: {
+                            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgb(255, 158, 68)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgb(255, 70, 131)'
+                                }
+                            ])
+                        },
+                        data: data6
+                    }
+                ]
+            }
+
+            // 不同时长电影数量
+            var chartGraphBin = this.$echarts.init(document.getElementById('chartsGraphBin'), null, {width: 990, height: 500})
+            var optionSep = {
+                tooltip: {
+                    trigger: 'axis',
+                    position: function(pt) {
+                        return [pt[0], '10%']
+                    }
+                },
+                title: {
+                    left: 'center',
+                    text: '不同评分电影数量'
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: date4
+                },
+                yAxis: {
+                    type: 'value',
+                    boundaryGap: [0, '100%']
+                },
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start: 0,
+                        end: 5
+                    },
+                    {
+                        start: 0,
+                        end: 5
+                    }
+                ],
+                series: [
+                    {
+                        name: '电影数',
+                        type: 'line',
+                        symbol: 'none',
+                        sampling: 'lttb',
+                        itemStyle: {
+                            color: 'rgb(255, 70, 131)'
+                        },
+                        areaStyle: {
+                            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgb(255, 158, 68)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgb(255, 70, 131)'
+                                }
+                            ])
+                        },
+                        data: data7
+                    }
+                ]
+            }
+
+            // 不同时长电影数量
+            var chartGraphTer = this.$echarts.init(document.getElementById('chartsGraphTer'), null, {width: 990, height: 500})
+            var optionOct = {
+                tooltip: {
+                    trigger: 'axis',
+                    position: function(pt) {
+                        return [pt[0], '10%']
+                    }
+                },
+                title: {
+                    left: 'center',
+                    text: '不同票房电影数量'
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: date5.sort((New, old) => {
+                        return New - old
+                    })
+                },
+                yAxis: {
+                    type: 'value',
+                    boundaryGap: [0, '100%']
+                },
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start: 0,
+                        end: 50
+                    },
+                    {
+                        start: 0,
+                        end: 5
+                    }
+                ],
+                series: [
+                    {
+                        name: '电影数',
+                        type: 'line',
+                        symbol: 'none',
+                        sampling: 'lttb',
+                        itemStyle: {
+                            color: 'rgb(255, 70, 131)'
+                        },
+                        areaStyle: {
+                            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgb(255, 158, 68)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgb(255, 70, 131)'
+                                }
+                            ])
+                        },
+                        data: data8
                     }
                 ]
             }
