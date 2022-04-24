@@ -33,15 +33,15 @@ export default {
             window.addEventListener('resize', function() {
                 chartGraphBar.resize()
             })
-            var app = {}
+            // var app = {}
             const categories = (function() {
-                let now = new Date()
-                let res = []
-                let len = 10
-                while (len--) {
-                    res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
-                    now = new Date(+now - 3000)
-                }
+                // let now = new Date()
+                let res = ['微电影', '悬疑', '纪录', '动画', '动作', '喜剧', '恐怖', '科幻', '爱情']
+                // let len = 10
+                // while (len--) {
+                //     res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
+                //     now = new Date(+now - 3000)
+                // }
                 return res
             })()
             const categories2 = (function() {
@@ -142,65 +142,65 @@ export default {
                 ]
             }
             chartGraphBar.setOption(option)
-            function f() {
-                if (Math.random() < 0.1) {
-                    return '微电影'
-                }
-                if (Math.random() <= 0.1 && Math.random() <= 0.2) {
-                    return '悬疑'
-                }
-                if (Math.random() <= 0.2 && Math.random() <= 0.3) {
-                    return '纪录'
-                }
-                if (Math.random() <= 0.3 && Math.random() <= 0.4) {
-                    return '动画'
-                }
-                if (Math.random() <= 0.4 && Math.random() <= 0.5) {
-                    return '动作'
-                }
-                if (Math.random() <= 0.5 && Math.random() <= 0.6) {
-                    return '喜剧'
-                }
-                if (Math.random() <= 0.6 && Math.random() <= 0.7) {
-                    return '恐怖'
-                }
-                if (Math.random() <= 0.7 && Math.random() <= 0.8) {
-                    return '科幻'
-                }
-                if (Math.random() <= 0.9 && Math.random() <= 1) {
-                    return '爱情'
-                }
-            }
-            app.count = 11
-            setInterval(function() {
-                // let axisData = new Date().toLocaleTimeString().replace(/^\D*/, '')
-                data.shift()
-                data.push(Math.round(Math.random() * 1000))
-                data2.shift()
-                data2.push(+(Math.random() * 10 + 5).toFixed(1))
-                categories.shift()
-                categories.push(f())
-                categories2.shift()
-                categories2.push(app.count++)
-                chartGraphBar.setOption({
-                    xAxis: [
-                        {
-                            data: categories
-                        },
-                        {
-                            data: categories2
-                        }
-                    ],
-                    series: [
-                        {
-                            data: data
-                        },
-                        {
-                            data: data2
-                        }
-                    ]
-                })
-            }, 3100)
+            // function f() {
+            //     if (Math.random() < 0.1) {
+            //         return '微电影'
+            //     }
+            //     if (Math.random() <= 0.1 && Math.random() <= 0.2) {
+            //         return '悬疑'
+            //     }
+            //     if (Math.random() <= 0.2 && Math.random() <= 0.3) {
+            //         return '纪录'
+            //     }
+            //     if (Math.random() <= 0.3 && Math.random() <= 0.4) {
+            //         return '动画'
+            //     }
+            //     if (Math.random() <= 0.4 && Math.random() <= 0.5) {
+            //         return '动作'
+            //     }
+            //     if (Math.random() <= 0.5 && Math.random() <= 0.6) {
+            //         return '喜剧'
+            //     }
+            //     if (Math.random() <= 0.6 && Math.random() <= 0.7) {
+            //         return '恐怖'
+            //     }
+            //     if (Math.random() <= 0.7 && Math.random() <= 0.8) {
+            //         return '科幻'
+            //     }
+            //     if (Math.random() <= 0.9 && Math.random() <= 1) {
+            //         return '爱情'
+            //     }
+            // }
+            // app.count = 11
+            // setInterval(function() {
+            //     // let axisData = new Date().toLocaleTimeString().replace(/^\D*/, '')
+            //     data.shift()
+            //     data.push(Math.round(Math.random() * 1000))
+            //     data2.shift()
+            //     data2.push(+(Math.random() * 10 + 5).toFixed(1))
+            //     categories.shift()
+            //     categories.push(f())
+            //     categories2.shift()
+            //     categories2.push(app.count++)
+            //     chartGraphBar.setOption({
+            //         xAxis: [
+            //             {
+            //                 data: categories
+            //             },
+            //             {
+            //                 data: categories2
+            //             }
+            //         ],
+            //         series: [
+            //             {
+            //                 data: data
+            //             },
+            //             {
+            //                 data: data2
+            //             }
+            //         ]
+            //     })
+            // }, 3100)
         }
     }
 }

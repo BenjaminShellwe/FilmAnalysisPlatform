@@ -62,7 +62,7 @@ module.exports = {
         port: 8087,
         proxy: {
             '/': {
-                target: 'http://localhost:8086',
+                target: 'http://shellwe.top:8086',
                 changeOrigin: true
             }
         },
