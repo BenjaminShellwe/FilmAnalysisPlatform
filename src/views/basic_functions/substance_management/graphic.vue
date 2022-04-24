@@ -32,7 +32,7 @@
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px; padding: 10px; background-color: rgba(130, 243, 195, 0.3);" shadow="hover">
-                    <span class="hover" @click="handleClick">电影导演主演分析</span>
+                    <span class="hover">placeholder</span>
                 </el-card>
             </el-col>
             <el-col :span="4">
