@@ -172,7 +172,7 @@ export default {
                         this.msg = '用户名已存在'
                     }
                 }).catch(function() {
-                    console.log('存在错误 请联系shellwe')
+                    console.log('存在错误 请联系admin')
                 })
             }
         },

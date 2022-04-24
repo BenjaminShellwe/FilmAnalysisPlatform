@@ -107,7 +107,7 @@
                 </el-table-column>
             </el-table>
             <el-dialog
-                title="来自shellwe的警告"
+                title="来自01的警告"
                 :visible.sync="dialogVisible"
                 width="30%"
             >
@@ -139,13 +139,13 @@ export default {
             currentPage3: 5,
             currentPage4: 4,
             tableData: [{
-                name: 'Shellwe',
+                name: '00',
                 notes: '正常'
             }, {
-                name: 'Shellwe',
+                name: '00',
                 notes: '正常'
             }, {
-                name: 'Shellwe',
+                name: '00',
                 notes: '正常'
             }]
         }

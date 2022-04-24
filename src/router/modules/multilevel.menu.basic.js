@@ -117,6 +117,27 @@ export default {
                         breadcrumb: true,
                         auth: ['permission.access']
                     }
+                },
+                {
+                    path: 'details',
+                    name: 'Details',
+                    component: () => import('@/views/basic_functions/substance_management/otherGraph/detail'),
+                    meta: {
+                        title: '更多细节数据',
+                        sidebar: false,
+                        breadcrumb: true
+                    }
+                },
+                {
+
+                    path: 'satisfaction',
+                    name: 'Satisfaction',
+                    component: () => import('@/views/basic_functions/substance_management/otherGraph/satisfaction'),
+                    meta: {
+                        title: '满意度',
+                        sidebar: false,
+                        breadcrumb: true
+                    }
                 }
             ]
         }

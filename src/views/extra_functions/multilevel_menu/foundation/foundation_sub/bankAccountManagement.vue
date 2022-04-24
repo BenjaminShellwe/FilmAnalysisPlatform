@@ -344,43 +344,7 @@ export default {
                 labelAS: '停用'
             }],
             optionAS: '',
-            tableData: [{
-                account: '8606222',
-                identification: '8606222021208017891373',
-                bankID: '6222021208017891373',
-                accountName: 'Shellwe',
-                accountState: '正常',
-                depositBank: '工商银行',
-                projectName: '互联网金融项目实训',
-                financialSetAccountNumber: '6222021208017891373'
-            }, {
-                account: '8606222',
-                identification: '8606222021208017891373',
-                bankID: '6222021208017891373',
-                accountName: 'Shellwe',
-                accountState: '正常',
-                depositBank: '工商银行',
-                projectName: '互联网金融项目实训',
-                financialSetAccountNumber: '6222021208017891373'
-            }, {
-                account: '8606222',
-                identification: '8606222021208017891373',
-                bankID: '6222021208017891373',
-                accountName: 'Shellwe',
-                accountState: '正常',
-                depositBank: '工商银行',
-                projectName: '互联网金融项目实训',
-                financialSetAccountNumber: '6222021208017891373'
-            }, {
-                account: '8606222',
-                identification: '8606222021208017891373',
-                bankID: '6222021208017891373',
-                accountName: 'Shellwe',
-                accountState: '正常',
-                depositBank: '工商银行',
-                projectName: '互联网金融项目实训',
-                financialSetAccountNumber: '6222021208017891373'
-            }]
+            tableData: []
         }
     },
     created() {

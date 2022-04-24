@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
+import '../node_modules/echarts/map/js/world.js'
 
 // import echarts from 'echarts'
 import * as echarts from 'echarts'

@@ -5,17 +5,6 @@
                 <div class="inLine">
                     <p class="hover" @click="back">返回上一页</p>
                 </div>
-                <el-row>
-                    <el-col :span="8">
-                        1
-                    </el-col>
-                    <el-col :span="8">
-                        |
-                    </el-col>
-                    <el-col :span="8">
-                        2
-                    </el-col>
-                </el-row>
             </template>
         </page-header>
         <el-row>
@@ -33,22 +22,22 @@
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px; padding: 10px; background-color: rgba(118, 125, 240, 0.3);" shadow="hover">
-                    电影数据筛选(不实现)
+                    <span class="hover" @click="handleClick('details')">更多可视化分析(点击进入)</span>
                 </el-card>
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px; padding: 10px; background-color: rgba(84, 183, 254, 0.3);" shadow="hover">
-                    特别关注电影(功能已足够)
+                    <span class="hover" @click="handleClick('satisfaction')">电影观众满意度分析</span>
                 </el-card>
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px; padding: 10px; background-color: rgba(130, 243, 195, 0.3);" shadow="hover">
-                    自建数据列表(不实现)
+                    <span class="hover" @click="handleClick">电影导演主演分析</span>
                 </el-card>
             </el-col>
             <el-col :span="4">
                 <el-card body-style="padding: 5px;" style="margin: 10px 20px 10px; padding: 10px 20px 10px; background-color: rgba(56, 205, 236, 0.3);" shadow="hover">
-                    颜色自行更改
+                    placeholder
                 </el-card>
             </el-col>
         </el-row>
@@ -69,7 +58,6 @@
                             <el-card id="chartsGraphTer" shadow="hover" style="margin: 4px; padding: 4px; background-color: rgb(240, 225, 253);" />
                         </el-tab-pane>
                     </el-tabs>
-
                 </el-col>
                 <el-col :span="8">
                     <el-card body-style="padding: 2px;" style="margin: 5px; padding: 5px; background-color: rgb(246, 252, 244);" shadow="hover">
@@ -138,6 +126,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import { Bar3DChart } from 'echarts-gl/charts'
 import { Grid3DComponent } from 'echarts-gl/components'
 import axios from 'axios'
+import router from '@/router'
 
 export default {
     name: 'Graphic',
@@ -175,6 +164,9 @@ export default {
     methods: {
         back() {
             history.go(-1)
+        },
+        handleClick(val) {
+            router.push({path: '/multilevel_menu_basic/substance_management/' + val})
         },
         handleWakeUpDialog(val, desc) {
             if (desc === 1) {

@@ -19,7 +19,7 @@
                     <template slot="label">
                         数据库名
                     </template>
-                    created_by_shellwe
+                    created_by_admin
                 </el-descriptions-item>
                 <el-descriptions-item>
                     <template slot="label">
@@ -128,9 +128,13 @@ export default {
                 })
                 .catch(() => {})
         },
-        handleSwitchChange() {
-            this.pageMainShow = !this.pageMainShow
-            console.log(this.pageMainShow)
+        handleWarn() {
+            this.$notify({
+                title: 'stop!!',
+                type: 'warning',
+                message: '暂不允许更换数据库',
+                duration: '3000'
+            })
         },
         handleQueryValue() {
             const that = this

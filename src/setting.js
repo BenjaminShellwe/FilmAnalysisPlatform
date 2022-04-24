@@ -18,9 +18,9 @@ let globalSettings = {
     // 是否显示底部版权信息，同时在路由 meta 对象里可以单独设置某个路由是否显示底部版权信息
     showCopyright: true,
     // 版权信息配置，格式为：Copyright © [dates] <company>
-    copyrightDates: '2022 shellwe',
-    copyrightCompany: 'not set',
-    copyrightWebsite: 'not set',
+    copyrightDates: '2022',
+    copyrightCompany: '',
+    copyrightWebsite: '',
     // 是否开启导航搜索
     enableNavSearch: true,
     // 是否开启全屏

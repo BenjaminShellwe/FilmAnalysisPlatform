@@ -23,7 +23,7 @@ export default {
     data() {
         return {
             form: {
-                content: '<h1>FilmAnalysisRedesign by shellwe</h1>',
+                content: '<h1>FilmAnalysisRedesign</h1>',
                 content2: '# FilmAnalysisRedesign'
             }
         }

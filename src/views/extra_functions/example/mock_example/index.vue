@@ -7,7 +7,7 @@
             <el-button @click="getPermission">测试：获取用户权限</el-button>
         </page-main>
         <el-dialog
-            title="来自shellwe的警告"
+            title="来自00的警告"
             :visible.sync="dialogVisible"
             width="30%"
             :before-close="nameCheck"
@@ -47,7 +47,7 @@ export default {
         nameCheck(val) {
             console.log(this.pageInput)
             val = this.pageInput
-            if (val == '林裕峰' || val == 'shellwe') {
+            if (val == '00' || val == '01') {
                 this.dialogVisible = false
             } else {
                 this.msg = '此字符未授权 !请尝试全名'

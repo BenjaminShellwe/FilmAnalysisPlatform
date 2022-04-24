@@ -119,7 +119,6 @@ export default {
                         keys.push(property)
                     }
                     that.pageFormHead = keys
-                    that.data = response.data.data
                 }
             }).catch(error => {
                 this.$notify({

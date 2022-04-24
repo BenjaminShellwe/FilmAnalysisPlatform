@@ -247,16 +247,16 @@ export default {
             },
             selectCompanions: [{
                 selectValue: 'Opt1',
-                selectLabel: 'benjamin'
+                selectLabel: '2'
             }, {
                 selectValue: 'Opt2',
-                selectLabel: 'thomas'
+                selectLabel: '3'
             }, {
                 selectValue: 'Opt3',
-                selectLabel: 'shellwe'
+                selectLabel: '0'
             }, {
                 selectValue: 'Opt4',
-                selectLabel: 'yufeng'
+                selectLabel: '1'
             }, {
                 selectValue: 'Opt5',
                 selectLabel: 'admin'

@@ -146,33 +146,33 @@ export default {
             valueSwitch1: false,
             tableData: [{
                 ID: '1010',
-                loginName: 'shellwe',
+                loginName: '',
                 state: '启用',
-                email: 'haotian19981998@gmail.com',
+                email: 'h.com',
                 phone: '12345678912',
                 department: '实验开发部门',
                 errorsLogin: '0'
             }, {
                 ID: '1011',
-                loginName: 'shellwe1',
+                loginName: '1',
                 state: '禁用',
-                email: 'haotian19981998@gmail.com',
+                email: 'h.com',
                 phone: '12345678912',
                 department: '实验开发部门',
                 errorsLogin: '10'
             }, {
                 ID: '1011',
-                loginName: 'shellwe1',
+                loginName: '',
                 state: '禁用',
-                email: 'haotian19981998@gmail.com',
+                email: 'h.com',
                 phone: '12345678912',
                 department: '实验开发部门',
                 errorsLogin: '10'
             }, {
                 ID: '1011',
-                loginName: 'shellwe1',
+                loginName: '',
                 state: '禁用',
-                email: 'haotian19981998@gmail.com',
+                email: 'h.com',
                 phone: '12345678912',
                 department: '实验开发部门',
                 errorsLogin: '10'

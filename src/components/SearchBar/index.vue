@@ -1,7 +1,7 @@
 <template>
-    <div key="shellwe0" class="search-container">
+    <div key="0" class="search-container">
         <slot />
-        <div v-if="showMore" key="shellwe" class="more">
+        <div v-if="showMore" key="0" class="more">
             <el-button type="text" size="small" :icon="isOpen?'el-icon-caret-top':'el-icon-caret-bottom'" @click="toggle">{{ isOpen?'收起':'展开' }}</el-button>
         </div>
     </div>
